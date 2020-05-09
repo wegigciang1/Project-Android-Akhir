@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "513921909895",
+    "firebase_url": "https://manajemen-berat-badan.firebaseio.com",
+    "project_id": "manajemen-berat-badan",
+    "storage_bucket": "manajemen-berat-badan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513921909895:android:b72966f29aef6af5b1e422",
+        "android_client_info": {
+          "package_name": "com.example.easyhealthy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513921909895-jquahlcn3ivojtjjnit8ftj6u69gp824.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.easyhealthy",
+            "certificate_hash": "7951f8a3ea49a48e29f34b947c5160659ffac33a"
+          }
+        },
+        {
+          "client_id": "513921909895-r4jnbdbdqn7t4t4m9gtkubu1col9vrfs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCya1W0Dk0mwxPzn4pj5ozCp29w1_0fA9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513921909895-r4jnbdbdqn7t4t4m9gtkubu1col9vrfs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
