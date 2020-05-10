@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         if(mFirebaseAuth.getCurrentUser() != null){
-            Intent halUtama = new Intent(getApplicationContext(), UtamaActivity.class);
+            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(halUtama);
             finish();
         }
