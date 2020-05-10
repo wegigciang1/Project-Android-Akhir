@@ -29,13 +29,11 @@ import java.util.Map;
 public class RegisActivity extends AppCompatActivity {
 
     private EditText txtnama,txtemail,txtpass,txtusia,txtjns_kelamin,txttinggi,txtberat;
-
     private Button btnRegis,btnPilih;
     private ProgressBar progressBar;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore firebaseFirestoreDb;
     private String UserID;
-
     String[] listItems;
 
     @Override
@@ -52,6 +50,7 @@ public class RegisActivity extends AppCompatActivity {
         txtberat = findViewById(R.id.editTextBeratRegis);
         btnRegis = findViewById(R.id.btnRegis);
         btnPilih = findViewById(R.id.btnPilihKelaminRegis);
+
         progressBar = findViewById(R.id.progressBarRegis);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
