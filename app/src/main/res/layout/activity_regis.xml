@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisActivity">
+
+    <TextView
+        android:id="@+id/textViewSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:text="Sign Up"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextNamaRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Nama Lengkap"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/textViewSignUp"
+        app:layout_constraintStart_toStartOf="@+id/textViewSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSignUp" />
+
+    <EditText
+        android:id="@+id/editTextEmailRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Email"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/editTextNamaRegis"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextNamaRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNamaRegis" />
+
+    <EditText
+        android:id="@+id/editTextPassRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Password"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEmailRegis"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailRegis" />
+
+    <EditText
+        android:id="@+id/editTextUsiaRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Usia"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassRegis"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassRegis" />
+
+    <Button
+        android:id="@+id/btnPilihKelaminRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Pilih"
+        app:layout_constraintStart_toStartOf="@+id/editTextUsiaRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsiaRegis" />
+
+    <EditText
+        android:id="@+id/editTextJnsKlmnRegis"
+        android:layout_width="119dp"
+        android:layout_height="49dp"
+        android:ems="10"
+        android:hint="Jenis Kelamin"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/editTextUsiaRegis"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextUsiaRegis"
+        app:layout_constraintTop_toTopOf="@+id/btnPilihKelaminRegis" />
+
+    <EditText
+        android:id="@+id/editTextTinggiRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Tinggi Badan"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="@+id/editTextJnsKlmnRegis"
+        app:layout_constraintStart_toStartOf="@+id/btnPilihKelaminRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextJnsKlmnRegis" />
+
+    <EditText
+        android:id="@+id/editTextBeratRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Berat Badan"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTinggiRegis"
+        app:layout_constraintStart_toStartOf="@+id/editTextTinggiRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTinggiRegis" />
+
+    <Button
+        android:id="@+id/btnRegis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Registrasi"
+        app:layout_constraintEnd_toEndOf="@+id/editTextBeratRegis"
+        app:layout_constraintStart_toStartOf="@+id/editTextBeratRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextBeratRegis" />
+
+    <ProgressBar
+        android:id="@+id/progressBarRegis"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegis" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
