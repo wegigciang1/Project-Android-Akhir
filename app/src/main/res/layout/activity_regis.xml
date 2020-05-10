@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:text="Sign Up"
+        android:textColor="#000000"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,18 +79,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextUsiaRegis" />
 
     <EditText
-        android:id="@+id/editTextJnsKlmnRegis"
-        android:layout_width="119dp"
-        android:layout_height="49dp"
-        android:ems="10"
-        android:hint="Jenis Kelamin"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editTextUsiaRegis"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextUsiaRegis"
-        app:layout_constraintTop_toTopOf="@+id/btnPilihKelaminRegis" />
-
-    <EditText
         android:id="@+id/editTextTinggiRegis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,9 +86,8 @@
         android:ems="10"
         android:hint="Tinggi Badan"
         android:inputType="numberSigned"
-        app:layout_constraintEnd_toEndOf="@+id/editTextJnsKlmnRegis"
         app:layout_constraintStart_toStartOf="@+id/btnPilihKelaminRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextJnsKlmnRegis" />
+        app:layout_constraintTop_toBottomOf="@+id/btnPilihKelaminRegis" />
 
     <EditText
         android:id="@+id/editTextBeratRegis"
@@ -134,6 +122,20 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRegis" />
+
+    <EditText
+        android:id="@+id/editTextJnsKlmnRegis"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Jenis Kelamin"
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnPilihKelaminRegis"
+        app:layout_constraintEnd_toEndOf="@+id/editTextUsiaRegis"
+        app:layout_constraintStart_toEndOf="@+id/btnPilihKelaminRegis"
+        app:layout_constraintTop_toTopOf="@+id/btnPilihKelaminRegis" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

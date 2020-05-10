@@ -5,10 +5,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.content.DialogInterface;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +30,7 @@ import java.util.Map;
 
 public class RegisActivity extends AppCompatActivity {
 
-    private EditText txtnama,txtemail,txtpass,txtusia,txtjns_kelamin,txttinggi,txtberat;
+    private EditText txtnama,txtemail,txtpass,txtusia,txttinggi,txtberat,txtjns_kelamin;
     private Button btnRegis,btnPilih;
     private ProgressBar progressBar;
     private FirebaseAuth mFirebaseAuth;
@@ -90,28 +92,27 @@ public class RegisActivity extends AppCompatActivity {
                 final String jns_kelamin = txtjns_kelamin.getText().toString();
                 final String tinggi = txttinggi.getText().toString();
                 final String berat = txtberat.getText().toString();
+
                 if (email.isEmpty()) {
-                    txtemail.setError("Silahkan masukkan Email");
+                    txtemail.setError("Silahkan masukkan Password");
                     return;
                 }
+
                 if (pass.isEmpty()) {
                     txtpass.setError("Silahkan masukkan Password");
                     return;
                 }
-                if (pass.length() < 6) {
-                    txtpass.setError("Password harus lebih dari 6 karakter");
-                    return;
-                }
+
                 if (nama.isEmpty()) {
-                    txtnama.setError("Silahkan masukkan Email");
+                    txtnama.setError("Silahkan masukkan Nama");
                     return;
                 }
                 if (usia.isEmpty()) {
-                    txtusia.setError("Silahkan masukkan Password");
+                    txtusia.setError("Silahkan masukkan Usia");
                     return;
                 }
                 if (jns_kelamin.isEmpty()) {
-                    txtjns_kelamin.setError("Silahkan masukkan Email");
+                    txtjns_kelamin.setError("Silahkan masukkan Jenis Kelamin");
                     return;
                 }
                 if (tinggi.isEmpty()) {
@@ -120,6 +121,14 @@ public class RegisActivity extends AppCompatActivity {
                 }
                 if (berat.isEmpty()) {
                     txtberat.setError("Silahkan masukkan Email");
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    txtemail.setError("Silahkan masukkan Email yang valid");
+                    return;
+                }
+                if (pass.length() < 6) {
+                    txtpass.setError("Password harus lebih dari 6 karakter");
                     return;
                 }
 
