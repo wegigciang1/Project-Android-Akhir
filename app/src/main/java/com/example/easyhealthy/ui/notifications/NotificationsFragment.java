@@ -18,13 +18,10 @@ import com.example.easyhealthy.LoginActivity;
 import com.example.easyhealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class NotificationsFragment extends Fragment {
-
-    private NotificationsViewModel notificationsViewModel;
-    private Button btnLogout;
+class NotificationsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
+        NotificationsViewModel notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         final Button btnLogout = root.findViewById(R.id.btnLogout);
         final TextView textView = root.findViewById(R.id.text_notifications);
@@ -41,7 +38,7 @@ public class NotificationsFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 Intent halLogin = new Intent(getActivity(), LoginActivity.class);
                 startActivity(halLogin);
-                getActivity().finish();
+                requireActivity().finish();
             }
         });
         return root;
