@@ -97,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         goToRegis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent halRegis = new Intent(LoginActivity.this, RegisActivity.class);
-                startActivity(halRegis);
+                Intent goToRegis = new Intent(LoginActivity.this, RegisActivity.class);
+                startActivity(goToRegis);
             }
         });
 
