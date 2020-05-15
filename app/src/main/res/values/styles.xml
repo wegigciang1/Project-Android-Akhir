@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HomeButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#FF4D4D</item>
+        <item name="colorButtonNormal">#FF4</item>
+
+
+    </style>
+
 </resources>

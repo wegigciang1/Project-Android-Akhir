@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "513921909895-4t2i4pk4ods1qp2a6aln32ga5975ne7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.easyhealthy",
+            "certificate_hash": "7fe30ea76c1c6fe1214085569cade7e136f4ef7d"
+          }
+        },
+        {
           "client_id": "513921909895-jquahlcn3ivojtjjnit8ftj6u69gp824.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
