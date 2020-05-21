@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:padding="5dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -28,11 +28,18 @@
             android:id="@+id/btnMoreHome"
             android:layout_width="wrap_content"
             android:layout_height="42dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:theme="@style/HomeButton"
-            android:text="more"/>
+            android:text="more"
+            android:textColor="#FFF"/>
     </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view_list_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"/>
 
 </LinearLayout>
