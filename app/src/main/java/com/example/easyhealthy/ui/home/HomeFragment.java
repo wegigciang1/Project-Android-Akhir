@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +38,7 @@ import dmax.dialog.SpotsDialog;
 
 public class HomeFragment extends Fragment implements FirebaseLoadListenerInterface {
 
-    private HomeViewModel homeViewModel;
+
 
     AlertDialog dialog;
     FirebaseLoadListenerInterface firebaseLoadListenerInterface;
@@ -58,8 +57,7 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of( this ).get( HomeViewModel.class );
+
         View root = inflater.inflate( R.layout.fragment_home, container, false );
 
         //view

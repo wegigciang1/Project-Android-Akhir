@@ -3,7 +3,6 @@ package com.example.easyhealthy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,12 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    //Pengenalan variable
-    private static int SPLASH_SCREEN_TIME = 5000; // 5 detik
-    Animation topAnim, bottomAnim;
-    ImageView ImgViewLogo;
-    TextView TxtViewSlogan;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +20,21 @@ public class SplashScreenActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
         //Pengenalan Variable
-        ImgViewLogo = findViewById(R.id.gambarLogoSplashScreen);
-        TxtViewSlogan = findViewById(R.id.textViewLogoSplashScreen);
+        ImageView imgViewLogo = findViewById(R.id.gambarLogoSplashScreen);
+        TextView txtViewSlogan = findViewById(R.id.textViewLogoSplashScreen);
 
         //animasi Program
-        topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
-        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
+        Animation topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+        Animation bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
 
         //setting animasi
-        ImgViewLogo.setAnimation(topAnim);
-        TxtViewSlogan.setAnimation(bottomAnim);
+        imgViewLogo.setAnimation(topAnim);
+        txtViewSlogan.setAnimation(bottomAnim);
 
         //untuk mengaktifkan splash screen yang berlangsung 5 detik dan lempar ke activity Login
+        //Pengenalan variable
+        // 5 detik
+        int SPLASH_SCREEN_TIME = 5000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
