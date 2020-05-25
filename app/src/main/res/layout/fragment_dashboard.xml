@@ -4,22 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ui.dashboard.DashboardFragment">
 
+    <EditText
+        android:id="@+id/inputBeratHarian"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Berat"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/text_dashboard"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnInputBeratHarian"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/button"
+        android:text="Input"
+        android:textColor="#FFFDFD"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/inputBeratHarian"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/inputBeratHarian"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/tampilGrafikBerat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

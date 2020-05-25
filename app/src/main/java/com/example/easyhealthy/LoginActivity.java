@@ -25,6 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -39,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         if (mFirebaseAuth.getCurrentUser() != null) {
-            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+            Intent halUtama = new Intent(getApplicationContext(), RencanaActivity.class);
             startActivity(halUtama);
             finish();
         }
@@ -47,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button btnLogin = findViewById(R.id.btnLogin);
-        TextView goToRegis = findViewById(R.id.textViewToRegis);
+        final TextView goToRegis = findViewById(R.id.textViewToRegis);
         TextView goToForgetPass = findViewById(R.id.textViewForgetPass);
         email = findViewById(R.id.editTextEmail);
         password = findViewById(R.id.editTextPass);
@@ -72,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 email.getText().clear();
                                 password.getText().clear();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), RencanaActivity.class));
                                 finish();
                             } else {
                                 try {
