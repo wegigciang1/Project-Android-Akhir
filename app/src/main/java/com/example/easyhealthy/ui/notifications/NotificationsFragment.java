@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.easyhealthy.LoginActivity;
-import com.example.easyhealthy.ProfileActivity;
+import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,7 +43,7 @@ public class NotificationsFragment extends Fragment {
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent halProfile = new Intent(getActivity(), ProfileActivity.class);
+                Intent halProfile = new Intent(getActivity(), ProfileButtonActivity.class);
                 startActivity(halProfile);
                 requireActivity().finish();
             }
