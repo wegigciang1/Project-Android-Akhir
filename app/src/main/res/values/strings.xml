@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Easy Healthy</string>
 
-    <string name="title_home">Home</string>
+    <string name="title_home">Tips</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Profile</string>
     <string name="tulisan_splashscreen">Care your healthy first!</string>
     <string name="deskripsi_gambar_splash">Gambar Logo SplashScreen</string>
     <string name="invalid_email">Enter Valid Email</string>

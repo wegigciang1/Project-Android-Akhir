@@ -61,6 +61,7 @@ public class ProfileButtonActivity extends AppCompatActivity {
 
                 Intent halFragmentHome = new Intent(ProfileButtonActivity.this, MainActivity.class);
                 startActivity(halFragmentHome);
+                finish();
 
             }
         });
