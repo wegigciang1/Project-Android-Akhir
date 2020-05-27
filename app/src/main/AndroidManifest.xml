@@ -37,6 +37,8 @@
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".ProfileButtonActivity" />
     </application>
 
 </manifest>
