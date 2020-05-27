@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.ui.home.Model.ItemData;
-import com.example.easyhealthy.ui.home.Model.ItemGroup;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
 
 import java.util.List;
 
@@ -71,9 +71,9 @@ public class ItemGroupHomeAdapter extends RecyclerView.Adapter<ItemGroupHomeAdap
 
         public MyviewHolder(@NonNull View itemView) {
             super( itemView );
-            item_title = (TextView)itemView.findViewById( R.id.itemTitle );
-            btn_more = (Button)itemView.findViewById( R.id.btnMoreHome );
-            recyclerView_item_list = (RecyclerView)itemView.findViewById( R.id.recycle_view_home );
+            item_title = itemView.findViewById(R.id.itemTitle);
+            btn_more = itemView.findViewById(R.id.btnMoreHome);
+            recyclerView_item_list = itemView.findViewById(R.id.recycle_view_home);
         }
     }
 
