@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.interfaces.ItemClickListenerInterface;
-import com.example.easyhealthy.ui.home.Model.ItemData;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -69,8 +69,8 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<ItemHomeAdapter.MyView
 
         public MyViewHolder(@NonNull View itemView) {
             super( itemView );
-            txt_item_title = (TextView) itemView.findViewById( R.id.tvTitle );
-            img_item = (ImageView) itemView.findViewById( R.id.itemImage );
+            txt_item_title = itemView.findViewById(R.id.tvTitle);
+            img_item = itemView.findViewById(R.id.itemImage);
 
             itemView.setOnClickListener( this );
         }
