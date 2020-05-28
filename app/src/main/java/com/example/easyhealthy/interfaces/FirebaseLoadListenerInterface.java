@@ -1,7 +1,7 @@
 package com.example.easyhealthy.interfaces;
 
 
-import com.example.easyhealthy.ui.home.Model.ItemGroup;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
 
 import java.util.List;
 

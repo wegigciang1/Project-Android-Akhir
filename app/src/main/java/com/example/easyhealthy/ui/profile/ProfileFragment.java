@@ -1,4 +1,4 @@
-package com.example.easyhealthy.ui.notifications;
+package com.example.easyhealthy.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +17,10 @@ import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class NotificationsFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         return view;
     }
 
@@ -31,6 +31,7 @@ public class NotificationsFragment extends Fragment {
         Button btnProfile = view.findViewById(R.id.btnProfileProfile);
         Button btnChangePass = view.findViewById(R.id.btnChangePassProfile);
         Button btnAbout = view.findViewById(R.id.btnAboutProfile);
+        Button btnCancelRencana = view.findViewById(R.id.btnCancelRencanaProfile);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +63,15 @@ public class NotificationsFragment extends Fragment {
                 Intent halAbout = new Intent(getActivity(), AboutButtonActivity.class);
                 startActivity(halAbout);
 
+            }
+        });
+
+        btnCancelRencana.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent halProfile1 = new Intent(getActivity(), ProfileTestActivity.class);
+                startActivity(halProfile1);
+                requireActivity().finish();
             }
         });
 

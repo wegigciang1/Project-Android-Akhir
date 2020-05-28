@@ -56,14 +56,11 @@ dependencies {
 
 
 
-    // Add Butter Knife
-    compile 'com.jakewharton:butterknife:8.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
 
 
-    // Glide
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     //firebasestore
-    implementation 'com.google.firebase:firebase-storage:16.0.3'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+
+
+
 }

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TahapRencanaActivity"></activity>
+        <activity android:name=".ui.profile.ProfileTestActivity" />
+        <activity android:name=".TahapRencanaActivity" />
         <activity android:name=".RencanaActivity" />
         <activity
             android:name=".RegisActivity"
@@ -34,10 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ProfileActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity android:name=".ProfileButtonActivity" />
         <activity android:name=".AboutButtonActivity" />
     </application>

@@ -1,4 +1,4 @@
-package com.example.easyhealthy.ui.home;
+package com.example.easyhealthy.ui.tipsManfaat;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.adapter.ItemGroupHomeAdapter;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
-import com.example.easyhealthy.ui.home.Model.ItemData;
-import com.example.easyhealthy.ui.home.Model.ItemGroup;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +36,7 @@ import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 
-public class HomeFragment extends Fragment implements FirebaseLoadListenerInterface {
+public class TipsManfaatFragment extends Fragment implements FirebaseLoadListenerInterface {
 
 
 
@@ -58,10 +58,10 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate( R.layout.fragment_home, container, false );
+        View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
         //view
-        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
+        my_reycycler_view = root.findViewById(R.id.recycle_view_home);
         my_reycycler_view.setHasFixedSize( true );
         my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
         getFirebaseData();
 
         //steps
-        textSteps = (TextView) root.findViewById( R.id.tvSteps );
+        textSteps = root.findViewById(R.id.tvSteps);
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService( Context.SENSOR_SERVICE );
         Sensor sensor = sensorManager.getDefaultSensor( Sensor.TYPE_ACCELEROMETER );
 
