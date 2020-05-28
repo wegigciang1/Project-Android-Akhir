@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.easyhealthy.AboutButtonActivity;
 import com.example.easyhealthy.LoginActivity;
+import com.example.easyhealthy.PasswordChangesButtonActivity;
 import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +54,8 @@ public class ProfileFragment extends Fragment {
         btnChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent halChangePass = new Intent(getActivity(), PasswordChangesButtonActivity.class);
+                startActivity(halChangePass);
             }
         });
 

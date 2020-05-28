@@ -37,6 +37,7 @@
         </activity>
         <activity android:name=".ProfileButtonActivity" />
         <activity android:name=".AboutButtonActivity" />
+        <activity android:name=".PasswordChangesButtonActivity" />
     </application>
 
 </manifest>
