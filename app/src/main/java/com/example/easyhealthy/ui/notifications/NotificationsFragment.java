@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.easyhealthy.AboutButtonActivity;
 import com.example.easyhealthy.LoginActivity;
 import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
@@ -58,6 +59,8 @@ public class NotificationsFragment extends Fragment {
         btnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent halAbout = new Intent(getActivity(), AboutButtonActivity.class);
+                startActivity(halAbout);
 
             }
         });
