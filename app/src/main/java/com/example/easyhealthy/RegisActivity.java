@@ -1,7 +1,5 @@
 package com.example.easyhealthy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -12,6 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -110,6 +111,7 @@ public class RegisActivity extends AppCompatActivity {
                                 user.put("Jenis Kelamin",jns_kelamin);
                                 user.put("Tinggi Badan",tinggi);
                                 user.put("Berat Badan",beratTanggalArray);
+                                user.put("FotoKey", "");
                                 firebaseFirestoreDb.collection("Users").document(UserID).set(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
