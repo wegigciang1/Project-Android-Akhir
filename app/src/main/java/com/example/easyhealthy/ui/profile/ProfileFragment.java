@@ -68,10 +68,12 @@ public class ProfileFragment extends Fragment {
                     if (document.exists()) {
                         String url = (String) document.get("FotoKey");
                         //Toast.makeText(requireActivity(), url, Toast.LENGTH_SHORT).show();
-                        Glide
-                                .with(getContext()) // get context of Fragment
-                                .load(url)
-                                .into(fotoProfile);
+                        if (url != "") {
+                            Glide
+                                    .with(getContext()) // get context of Fragment
+                                    .load(url)
+                                    .into(fotoProfile);
+                        }
                         String name = (String) document.get("Nama");
                         namaText.setText(name);
                     } else {
