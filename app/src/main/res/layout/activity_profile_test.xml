@@ -9,16 +9,17 @@
 
     <TextView
         android:id="@+id/textViewChooseFileTestProfile"
-        android:layout_width="89dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:text="Choose File"
         android:textColor="#1B9CC6"
+        android:textSize="19dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,22 +33,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.433"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewShUploadTestProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnUploadTestProfile"
-        android:layout_alignBottom="@+id/btnUploadTestProfile"
-        android:layout_marginBottom="16dp"
-        android:layout_toEndOf="@+id/btnUploadTestProfile"
-        android:gravity="center"
-        android:text="show Upload"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.827"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView

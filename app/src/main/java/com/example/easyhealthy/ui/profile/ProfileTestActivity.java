@@ -65,7 +65,6 @@ public class ProfileTestActivity extends AppCompatActivity {
 
         btnUpload = findViewById(R.id.btnUploadTestProfile);
         textViewChooseImage = findViewById(R.id.textViewChooseFileTestProfile);
-        textViewShowUpload = findViewById(R.id.textViewShUploadTestProfile);
         imageView = findViewById(R.id.imageViewTestProfile);
         mProgressBar = findViewById(R.id.progressBarProfile);
 
@@ -95,20 +94,12 @@ public class ProfileTestActivity extends AppCompatActivity {
                 } else {
                     uploadFile(washingtonRef);
                     //intent
-                    Intent halFragmentHome = new Intent(ProfileTestActivity.this, MainActivity.class);
-                    startActivity(halFragmentHome);
-                    finish();
+
                 }
 
             }
         });
 
-        textViewShowUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
 
@@ -146,8 +137,7 @@ public class ProfileTestActivity extends AppCompatActivity {
 
                             }
                             // Continue with the task to get the download URL
-                            //set progress bar mati
-                            mProgressBar.setVisibility(View.GONE);
+
                             //Toast.makeText(ProfileTestActivity.this, "Upload Berhasil", Toast.LENGTH_LONG).show();
                             return fileReference.getDownloadUrl();
 
@@ -164,6 +154,12 @@ public class ProfileTestActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(ProfileTestActivity.this, "data Foto Berhasil Disimpan", Toast.LENGTH_SHORT).show();
+                                                //set progress bar mati
+                                                mProgressBar.setVisibility(View.GONE);
+                                                //lempar ke home klo udah ke save
+                                                Intent halFragmentHome = new Intent(ProfileTestActivity.this, MainActivity.class);
+                                                startActivity(halFragmentHome);
+                                                finish();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
