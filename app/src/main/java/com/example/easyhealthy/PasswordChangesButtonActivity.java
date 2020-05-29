@@ -1,5 +1,6 @@
 package com.example.easyhealthy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +63,9 @@ public class PasswordChangesButtonActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(PasswordChangesButtonActivity.this, "Password Changed", Toast.LENGTH_SHORT).show();
+                                            Intent halprofile = new Intent(PasswordChangesButtonActivity.this, MainActivity.class);
+                                            startActivity(halprofile);
+                                            finish();
                                         } else {
                                             Toast.makeText(PasswordChangesButtonActivity.this, "Password Not Changed", Toast.LENGTH_SHORT).show();
                                         }
@@ -73,7 +77,9 @@ public class PasswordChangesButtonActivity extends AppCompatActivity {
                     });
 
                 }
+
             }
+
         });
     }
 

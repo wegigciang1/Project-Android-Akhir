@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
                         String url = (String) document.get("FotoKey");
                         //Toast.makeText(requireActivity(), url, Toast.LENGTH_SHORT).show();
                         Glide
-                                .with(ProfileFragment.this) // get context of Fragment
+                                .with(getContext()) // get context of Fragment
                                 .load(url)
                                 .into(fotoProfile);
                         String name = (String) document.get("Nama");
@@ -100,7 +100,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent halProfile = new Intent(getActivity(), ProfileButtonActivity.class);
                 startActivity(halProfile);
-                requireActivity().finish();
             }
         });
         btnChangePass.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +124,6 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent halProfile1 = new Intent(getActivity(), ProfileTestActivity.class);
                 startActivity(halProfile1);
-                requireActivity().finish();
             }
         });
 

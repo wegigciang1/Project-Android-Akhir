@@ -1,7 +1,6 @@
 package com.example.easyhealthy.ui.dashboard;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easyhealthy.DataBerat;
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.adapter.DataBerat;
 import com.example.easyhealthy.adapter.TampilRiwayatBeratAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -34,10 +32,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,16 +43,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class DashboardFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore mFirebaseFirestore;
-    private DocumentReference doc;
-    private CollectionReference collref;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
+    private CollectionReference collref = mFirebaseFirestore.collection("Berat Badan");
     private TampilRiwayatBeratAdapter tampilRiwayatBeratAdapter;
+    private String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -63,12 +63,6 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseFirestore = FirebaseFirestore.getInstance();
-        doc = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
-        collref = mFirebaseFirestore.collection("Users");
-
-
         CardView pilihStatistik = view.findViewById(R.id.pilihStatistik);
         CardView pilihInputRiwayat = view.findViewById(R.id.pilihInputRiwayat);
         CardView pilihKalori = view.findViewById(R.id.pilihKalori);
@@ -76,9 +70,15 @@ public class DashboardFragment extends Fragment {
         final LineChart tampilBerat = view.findViewById(R.id.tampilGrafikBerat);
         final EditText inputBeratHarian = view.findViewById(R.id.inputBeratHarian);
         Button btnInputBeratHarian = view.findViewById(R.id.btnInputBeratHarian);
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_tampil_berat);
 
-        isiGrafik(doc, tampilBerat);
-        setUpRecycleView(view);
+        isiGrafik(collref, tampilBerat, userID);
+
+        tampilRiwayatBeratAdapter = setUpRecycleView(collref, userID);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(tampilRiwayatBeratAdapter);
 
         pilihStatistik.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,82 +107,73 @@ public class DashboardFragment extends Fragment {
         btnInputBeratHarian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tambahBerat(doc, inputBeratHarian);
+                tambahBerat(mFirebaseFirestore, inputBeratHarian, userID, tampilBerat, collref);
             }
         });
 
     }
 
-    private void setUpRecycleView(View view) {
-        Query query = collref.orderBy("Berat Badan",Query.Direction.DESCENDING);
+    private TampilRiwayatBeratAdapter setUpRecycleView(CollectionReference collref, String userId) {
+        Query query = collref.whereEqualTo("id", userId);
 
         FirestoreRecyclerOptions<DataBerat> options = new FirestoreRecyclerOptions.Builder<DataBerat>()
-                .setQuery(query,DataBerat.class)
+                .setQuery(query, DataBerat.class)
                 .build();
 
-        tampilRiwayatBeratAdapter = new TampilRiwayatBeratAdapter(options);
+        return new TampilRiwayatBeratAdapter(options);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_tampil_berat);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(tampilRiwayatBeratAdapter);
     }
 
-    private void tambahBerat(DocumentReference doc, EditText inputHarian) {
+    private void tambahBerat(final FirebaseFirestore mFirebaseFirestore, EditText inputHarian, final String userId, final LineChart tampilBerat, final CollectionReference collref) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
         Date date = new Date();
         Map<String, String> beratHarian = new HashMap<>();
         beratHarian.put("Berat", inputHarian.getText().toString());
         beratHarian.put("Tanggal", sdf.format(date));
+        beratHarian.put("id", userId);
 
-        doc.update("Berat Badan", FieldValue.arrayUnion(beratHarian))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        collref
+                .add(beratHarian)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(requireActivity(), "Berhasil", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(requireActivity(), "Berhasil Menambah Berat", Toast.LENGTH_SHORT).show();
+                        isiGrafik(collref, tampilBerat, userId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(requireActivity(), "Gagal", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
     }
 
-    private void isiGrafik(DocumentReference doc, final LineChart tampilBerat) {
+    private void isiGrafik(CollectionReference collref, final LineChart tampilBerat, String userId) {
         final ArrayList<Entry> dataSet = new ArrayList<>();
-
-        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            private static final String TAG = "TAG";
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        ArrayList<Object> objectArrayList = (ArrayList<Object>) document.get("Berat Badan");
-
-                        for (int i = 0; i < objectArrayList.size(); i++) {
-                            Map<String, String> beratHarian = (Map<String, String>) objectArrayList.get(i);
-                            dataSet.add(new Entry(i, Integer.parseInt(beratHarian.get("Berat"))));
-                            beratHarian.clear();
+        collref.whereEqualTo("id", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int i = 0;
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                dataSet.add(new Entry(i, Integer.parseInt(String.valueOf(document.get("Berat")))));
+                                i++;
+                            }
+                            LineDataSet lineDataSet = new LineDataSet(dataSet, "Berat");
+                            ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
+                            iLineDataSets.add(lineDataSet);
+                            LineData lineData = new LineData(iLineDataSets);
+                            tampilBerat.setData(lineData);
+                            tampilBerat.invalidate();
                         }
-                        LineDataSet lineDataSet = new LineDataSet(dataSet, "Berat");
-                        ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
-                        iLineDataSets.add(lineDataSet);
-                        LineData lineData = new LineData(iLineDataSets);
-                        tampilBerat.setData(lineData);
-                        tampilBerat.invalidate();
-
-                    } else {
-                        Log.d(TAG, "No such document");
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+                });
+
     }
 
     @Override

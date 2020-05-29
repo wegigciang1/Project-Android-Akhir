@@ -195,7 +195,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/inputBeratHarian"
                 android:layout_marginTop="5dp" />
-
         </RelativeLayout>
 
     </FrameLayout>

@@ -178,6 +178,19 @@
             android:background="@drawable/button"
             android:text="Next"
             android:textColor="#FFFDFD"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+        <Button
+            android:id="@+id/btnHitungRencana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_below="@+id/inputTargetBerat"
+            android:background="@drawable/button"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btnNextToHome"
+            android:text="Hitung"
+            android:textColor="#FFFDFD"
             android:textSize="14sp" />
     </RelativeLayout>
 

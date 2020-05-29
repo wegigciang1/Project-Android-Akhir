@@ -29,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -90,13 +89,9 @@ public class RegisActivity extends AppCompatActivity {
                     final String usia = txtusia.getText().toString();
                     final String jns_kelamin = radioJnsKlmin.getText().toString();
                     final String tinggi = txttinggi.getText().toString();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
-                    Date date = new Date();
-                    Map<String,Object> beratTanggalObject = new HashMap<>();
-                    beratTanggalObject.put("Berat",txtberat.getText().toString());
-                    beratTanggalObject.put("Tanggal",sdf.format(date));
-                    final ArrayList<Object> beratTanggalArray = new ArrayList<>();
-                    beratTanggalArray.add(beratTanggalObject);
+                    final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                    final Date date = new Date();
+
 
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -110,13 +105,32 @@ public class RegisActivity extends AppCompatActivity {
                                 user.put("Usia",usia);
                                 user.put("Jenis Kelamin",jns_kelamin);
                                 user.put("Tinggi Badan",tinggi);
-                                user.put("Berat Badan",beratTanggalArray);
                                 user.put("FotoKey", "");
+
+                                Map<String, Object> beratTanggal = new HashMap<>();
+                                beratTanggal.put("Berat", txtberat.getText().toString());
+                                beratTanggal.put("Tanggal", sdf.format(date));
+                                beratTanggal.put("id", UserID);
+
                                 firebaseFirestoreDb.collection("Users").document(UserID).set(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d("TAG", "Berhasil : "+UserID);
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("TAG", e.toString());
+                                            }
+                                        });
+                                firebaseFirestoreDb.collection("Berat Badan").document().set(beratTanggal)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("TAG", "Berhasil : " + UserID);
                                                 progressBar.setVisibility(View.GONE);
                                                 mFirebaseAuth.signOut();
                                                 finish();

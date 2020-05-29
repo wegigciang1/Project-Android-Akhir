@@ -1,11 +1,11 @@
 package com.example.easyhealthy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 public class TahapRencanaActivity extends AppCompatActivity {
 
@@ -21,6 +21,7 @@ public class TahapRencanaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goToHome = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(goToHome);
+                finish();
             }
         });
         pilihOlahraga.setOnClickListener(new View.OnClickListener() {
@@ -28,6 +29,7 @@ public class TahapRencanaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goToHome = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(goToHome);
+                finish();
             }
         });
 

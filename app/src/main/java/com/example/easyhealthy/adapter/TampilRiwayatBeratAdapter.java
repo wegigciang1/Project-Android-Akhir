@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easyhealthy.DataBerat;
 import com.example.easyhealthy.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -21,7 +22,7 @@ public class TampilRiwayatBeratAdapter extends FirestoreRecyclerAdapter<DataBera
     @Override
     protected void onBindViewHolder(@NonNull TampilRiwayatBeratHolder holder, int position, @NonNull DataBerat model) {
         holder.tanggal.setText(model.getTanggal());
-        holder.berat.setText(model.getBerat());
+        holder.berat.setText(String.valueOf(model.getBerat()));
     }
 
     @NonNull
@@ -30,7 +31,7 @@ public class TampilRiwayatBeratAdapter extends FirestoreRecyclerAdapter<DataBera
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.berat_item,parent,false
         );
-        return null;
+        return new TampilRiwayatBeratHolder(view);
     }
 
     class TampilRiwayatBeratHolder extends RecyclerView.ViewHolder{
