@@ -10,9 +10,10 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewStep"
         android:layout_width="250dp"
         android:layout_height="80dp"
-
+        android:layout_margin="15dp"
         app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="25dp"
         app:cardElevation="10dp">
@@ -27,6 +28,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/cardViewStep"
         android:id="@+id/recycle_view_list_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

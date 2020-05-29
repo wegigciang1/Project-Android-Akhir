@@ -42,6 +42,7 @@
             android:theme="@style/HomeButton" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/itemTitle"
             android:id="@+id/recycle_view_list_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

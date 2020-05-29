@@ -21,16 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
-import com.example.easyhealthy.ui.home.Model.ItemData;
-import com.example.easyhealthy.ui.home.Model.ItemGroup;
 import com.example.easyhealthy.ui.home.ViewHolder.ItemDataViewHolder;
 import com.example.easyhealthy.ui.home.ViewHolder.ItemGroupViewHolder;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
+import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class HomeFragment extends Fragment{
+public class TipsManfaatFragment extends Fragment{
 
     //coba reycle view 2
     FirebaseDatabase database;
@@ -63,18 +63,11 @@ public class HomeFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
         //view
-        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
+        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_list_home );
         my_reycycler_view.setHasFixedSize( true );
         my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
-        //tes
-        //init
-//        myData = FirebaseDatabase.getInstance().getReference( "manajemen-berat-badan" ).child( "TipsManfaat" );
-//        dialog = new SpotsDialog.Builder().setContext( getActivity() ).build();
-//        firebaseLoadListenerInterface = this;
 
-        //load data
-//        getFirebaseData();
 
         //steps
         //coba reycleview 2
@@ -194,37 +187,4 @@ public class HomeFragment extends Fragment{
         stepcount = sharedPreferences.getInt( "stepcount" , 0);
     }
 
-//    private void getFirebaseData() {
-//        dialog.show();
-//        myData.addListenerForSingleValueEvent( new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                List<ItemGroup> itemGroups = new ArrayList<>();
-//                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
-//                    ItemGroup itemGroup = new ItemGroup();
-//                    itemGroup.setHeaderTitle( groupSnapshot.child( "headerTitle" ).getValue( true ).toString() );
-//                    GenericTypeIndicator<ArrayList<ItemData>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<ItemData>>() {
-//                    };
-//                    itemGroup.setListResep( groupSnapshot.child( "listResep" ).getValue( genericTypeIndicator ) );
-//                    itemGroups.add( itemGroup );
-//
-//                }
-//                firebaseLoadListenerInterface.onFirebaseLoadSucces( itemGroups );
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                firebaseLoadListenerInterface.onFirebaseLoadFailed( databaseError.getMessage() );
-//            }
-//        } );
-//    }
-//    @Override
-//    public void onFirebaseLoadSucces(List<ItemGroup> itemGroupList) {
-//
-//        dialog.dismiss();
-//    }
-//    @Override
-//    public void onFirebaseLoadFailed(String message) {
-//        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
-//        dialog.dismiss();
-//    }
 }
