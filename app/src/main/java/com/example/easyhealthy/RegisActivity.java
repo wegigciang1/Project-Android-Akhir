@@ -1,13 +1,5 @@
 package com.example.easyhealthy;
 
-import androidx.annotation.NonNull;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-
-import android.content.DialogInterface;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -15,7 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -31,19 +28,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class RegisActivity extends AppCompatActivity {
 
-    private EditText txtnama,txtemail,txtpass,txtusia,txttinggi,txtberat,txtjns_kelamin;
+    private EditText txtnama,txtemail,txtpass,txtusia,txttinggi,txtberat;
     private ProgressBar progressBar;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore firebaseFirestoreDb;
     private AwesomeValidation awesomeValidation;
     private String UserID;
-    private String[] listItems;
+    private RadioGroup groupJnsKlmin;
+    private RadioButton radioJnsKlmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +55,10 @@ public class RegisActivity extends AppCompatActivity {
         txtemail = findViewById(R.id.editTextEmailRegis);
         txtpass = findViewById(R.id.editTextPassRegis);
         txtusia = findViewById(R.id.editTextUsiaRegis);
-        txtjns_kelamin = findViewById(R.id.editTextJnsKlmnRegis);
+        groupJnsKlmin = findViewById(R.id.radioGroup);
         txttinggi = findViewById(R.id.editTextTinggiRegis);
         txtberat = findViewById(R.id.editTextBeratRegis);
         Button btnRegis = findViewById(R.id.btnRegis);
-        Button btnPilih = findViewById(R.id.btnPilihKelaminRegis);
 
         progressBar = findViewById(R.id.progressBarRegis);
 
@@ -73,43 +73,25 @@ public class RegisActivity extends AppCompatActivity {
         awesomeValidation.addValidation(this,R.id.editTextTinggiRegis, Range.closed(140, 190),R.string.invalid_height);
         awesomeValidation.addValidation(this,R.id.editTextBeratRegis, Range.closed(30, 70),R.string.invalid_weight);
 
-        btnPilih.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listItems = new String[]{"Laki-Laki","Perempuan"};
-                AlertDialog.Builder builder = new AlertDialog.Builder(RegisActivity.this);
-                builder.setTitle("Pilih Jenis Kelamin");
-                builder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        txtjns_kelamin.setText(listItems[which]);
-                        txtjns_kelamin.setError(null);
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                AlertDialog mAlertDialog = builder.create();
-                mAlertDialog.show();
-            }
-        });
-
         btnRegis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean cekJnsKlmin = validateJnsKlmin(txtjns_kelamin);
-                if(awesomeValidation.validate() && cekJnsKlmin){
+                int radioId = groupJnsKlmin.getCheckedRadioButtonId();
+                radioJnsKlmin = findViewById(radioId);
+                if(radioId == -1){
+                    Toast.makeText(RegisActivity.this, String.valueOf(radioId), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(awesomeValidation.validate()){
                     final String nama = txtnama.getText().toString();
                     String email = txtemail.getText().toString();
                     String pass = txtpass.getText().toString();
                     final String usia = txtusia.getText().toString();
-                    final String jns_kelamin = txtjns_kelamin.getText().toString();
+                    final String jns_kelamin = radioJnsKlmin.getText().toString();
                     final String tinggi = txttinggi.getText().toString();
-                    final String berat = txtberat.getText().toString();
+                    final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                    final Date date = new Date();
+
 
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -123,13 +105,19 @@ public class RegisActivity extends AppCompatActivity {
                                 user.put("Usia",usia);
                                 user.put("Jenis Kelamin",jns_kelamin);
                                 user.put("Tinggi Badan",tinggi);
-                                Map<String,Object> beratUser = new HashMap<>();
-                                beratUser.put("Berat Badan",berat);
+                                user.put("FotoKey", "");
+
+                                Map<String, Object> beratTanggal = new HashMap<>();
+                                beratTanggal.put("Berat", txtberat.getText().toString());
+                                beratTanggal.put("Tanggal", sdf.format(date));
+                                beratTanggal.put("id", UserID);
+
                                 firebaseFirestoreDb.collection("Users").document(UserID).set(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d("TAG", "Berhasil : "+UserID);
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -138,13 +126,15 @@ public class RegisActivity extends AppCompatActivity {
                                                 Log.d("TAG", e.toString());
                                             }
                                         });
-                                firebaseFirestoreDb.collection("Berat User").document(UserID).set(beratUser)
+                                firebaseFirestoreDb.collection("Berat Badan").document().set(beratTanggal)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.d("TAG", "Berhasil : "+UserID);
-                                                FirebaseAuth.getInstance().signOut();
+                                                Log.d("TAG", "Berhasil : " + UserID);
+                                                progressBar.setVisibility(View.GONE);
+                                                mFirebaseAuth.signOut();
                                                 finish();
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -163,7 +153,7 @@ public class RegisActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                                progressBar.setVisibility(View.GONE);
+
                             }
                         }
                     });
@@ -171,14 +161,5 @@ public class RegisActivity extends AppCompatActivity {
 
             }
         });
-    }
-    private boolean validateJnsKlmin(EditText txtjns_kelamin){
-        boolean hasilcek = true;
-        String jnsKlmin = txtjns_kelamin.getText().toString();
-        if(jnsKlmin.isEmpty()){
-            txtjns_kelamin.setError("Masukkan Jenis Kelamin");
-            hasilcek = false;
-        }
-        return hasilcek;
     }
 }

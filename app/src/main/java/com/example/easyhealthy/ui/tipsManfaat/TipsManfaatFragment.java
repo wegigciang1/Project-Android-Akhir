@@ -1,4 +1,4 @@
-package com.example.easyhealthy.ui.home;
+package com.example.easyhealthy.ui.tipsManfaat;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -60,27 +60,12 @@ public class HomeFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate( R.layout.fragment_home, container, false );
+        View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
         //view
-//        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
-//        my_reycycler_view.setHasFixedSize( true );
-//        my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-//
-//        ItemGroupHomeAdapter adapter = new ItemGroupHomeAdapter( getActivity(), itemGroupList );
-//        my_reycycler_view.setAdapter( adapter );
-//
-//
-//        for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
-//            ItemGroup itemGroup = new ItemGroup();
-//            itemGroup.setHeaderTitle( groupSnapshot.child( "headerTitle" ).getValue( true ).toString() );
-//            GenericTypeIndicator<ArrayList<ItemData>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<ItemData>>() {
-//            };
-//            itemGroup.setListResep( groupSnapshot.child( "listResep" ).getValue( genericTypeIndicator ) );
-//            itemGroups.add( itemGroup );
-//
-//        }
-//        firebaseLoadListenerInterface.onFirebaseLoadSucces( itemGroups );
+        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
+        my_reycycler_view.setHasFixedSize( true );
+        my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
         //tes
         //init

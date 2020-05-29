@@ -1,4 +1,4 @@
-package com.example.easyhealthy.ui.home.Model;
+package com.example.easyhealthy.ui.tipsManfaat.Model;
 
 public class ItemData {
     private String judul,image;

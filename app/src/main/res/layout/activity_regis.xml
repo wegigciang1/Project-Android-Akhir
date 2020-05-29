@@ -11,7 +11,7 @@
         android:id="@+id/textViewSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="30dp"
         android:text="Sign Up"
         android:textColor="#FFFDFD"
         android:textSize="40sp"
@@ -38,101 +38,99 @@
         android:id="@+id/editTextEmailRegis"
         android:layout_width="285dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hint="Email"
-        android:ems="10"
-        android:inputType="textEmailAddress"
+        android:layout_marginTop="10dp"
         android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="@+id/editTextNamaRegis"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextNamaRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNamaRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNamaRegis" />
 
     <EditText
         android:id="@+id/editTextPassRegis"
         android:layout_width="285dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hint="Password"
-        android:ems="10"
-        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
         android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/editTextEmailRegis"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextEmailRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmailRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailRegis" />
 
     <EditText
         android:id="@+id/editTextUsiaRegis"
         android:layout_width="285dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hint="Usia"
-        android:ems="10"
-        android:inputType="number"
+        android:layout_marginTop="10dp"
         android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Usia"
+        android:importantForAutofill="no"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="@+id/editTextPassRegis"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextPassRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassRegis" />
 
-    <Button
-        android:id="@+id/btnPilihKelaminRegis"
-        android:layout_width="78dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button"
-        android:text="Pilih"
-        android:textColor="#FFFDFD"
-        app:layout_constraintStart_toStartOf="@+id/editTextUsiaRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsiaRegis" />
-
-    <EditText
-        android:id="@+id/editTextJnsKlmnRegis"
-        android:layout_width="197dp"
-        android:layout_height="48dp"
-        android:background="@drawable/input_field"
-        android:ems="10"
-        android:enabled="false"
-        android:hint="Jenis Kelamin"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnPilihKelaminRegis"
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/editTextUsiaRegis"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnPilihKelaminRegis"
-        app:layout_constraintTop_toTopOf="@+id/btnPilihKelaminRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintStart_toStartOf="@+id/editTextUsiaRegis"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsiaRegis">
+
+        <RadioButton
+            android:id="@+id/radioButtonPerempuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perempuan" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLaki"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="Laki-Laki" />
+    </RadioGroup>
 
     <EditText
         android:id="@+id/editTextTinggiRegis"
         android:layout_width="285dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/input_field"
         android:ems="10"
         android:hint="Tinggi Badan"
+        android:importantForAutofill="no"
         android:inputType="numberSigned"
-        android:background="@drawable/input_field"
-        app:layout_constraintStart_toStartOf="@+id/btnPilihKelaminRegis"
-        app:layout_constraintTop_toBottomOf="@+id/btnPilihKelaminRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     <EditText
         android:id="@+id/editTextBeratRegis"
         android:layout_width="285dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hint="Berat Badan"
-        android:ems="10"
-        android:inputType="numberSigned"
+        android:layout_marginTop="10dp"
         android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Berat Badan"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="@+id/editTextTinggiRegis"
         app:layout_constraintStart_toStartOf="@+id/editTextTinggiRegis"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTinggiRegis"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTinggiRegis" />
 
     <Button
         android:id="@+id/btnRegis"
@@ -156,9 +154,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRegis"
-        app:layout_constraintVertical_bias="0.32" />
-
-
+        app:layout_constraintVertical_bias="0.25" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
