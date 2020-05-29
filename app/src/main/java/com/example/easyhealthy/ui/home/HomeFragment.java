@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,23 +20,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.adapter.ItemGroupHomeAdapter;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
 import com.example.easyhealthy.ui.home.Model.ItemData;
 import com.example.easyhealthy.ui.home.Model.ItemGroup;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.example.easyhealthy.ui.home.ViewHolder.ItemDataViewHolder;
+import com.example.easyhealthy.ui.home.ViewHolder.ItemGroupViewHolder;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
+public class HomeFragment extends Fragment{
 
-import dmax.dialog.SpotsDialog;
-
-public class HomeFragment extends Fragment implements FirebaseLoadListenerInterface {
+    //coba reycle view 2
+    FirebaseDatabase database;
+    RecyclerView recyclerView;
+    FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder> adapterGroup;
+    FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder> adapterData;
+    RecyclerView.LayoutManager manager;
 
 
 
@@ -51,9 +52,10 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
     private TextView textSteps;
     private double MagnitudePrevious =0;
     private  Integer stepcount=0;
+    public ImageView itemImage;
 
     //coba coba
-    List<ItemGroup> itemGroupList;
+//    List<ItemGroup> itemGroupList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,23 +63,94 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
         View root = inflater.inflate( R.layout.fragment_home, container, false );
 
         //view
-        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
-        my_reycycler_view.setHasFixedSize( true );
-        my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
-
-        ItemGroupHomeAdapter adapter = new ItemGroupHomeAdapter( getActivity(), itemGroupList );
-        my_reycycler_view.setAdapter( adapter );
+//        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_home );
+//        my_reycycler_view.setHasFixedSize( true );
+//        my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
+//
+//        ItemGroupHomeAdapter adapter = new ItemGroupHomeAdapter( getActivity(), itemGroupList );
+//        my_reycycler_view.setAdapter( adapter );
+//
+//
+//        for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
+//            ItemGroup itemGroup = new ItemGroup();
+//            itemGroup.setHeaderTitle( groupSnapshot.child( "headerTitle" ).getValue( true ).toString() );
+//            GenericTypeIndicator<ArrayList<ItemData>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<ItemData>>() {
+//            };
+//            itemGroup.setListResep( groupSnapshot.child( "listResep" ).getValue( genericTypeIndicator ) );
+//            itemGroups.add( itemGroup );
+//
+//        }
+//        firebaseLoadListenerInterface.onFirebaseLoadSucces( itemGroups );
 
         //tes
         //init
-        myData = FirebaseDatabase.getInstance().getReference( "manajemen-berat-badan" );
-        dialog = new SpotsDialog.Builder().setContext( getActivity() ).build();
-        firebaseLoadListenerInterface = this;
+//        myData = FirebaseDatabase.getInstance().getReference( "manajemen-berat-badan" ).child( "TipsManfaat" );
+//        dialog = new SpotsDialog.Builder().setContext( getActivity() ).build();
+//        firebaseLoadListenerInterface = this;
 
         //load data
-        getFirebaseData();
+//        getFirebaseData();
 
         //steps
+        //coba reycleview 2
+        manager = new LinearLayoutManager(  getActivity() );
+        database = FirebaseDatabase.getInstance();
+        myData = database.getReference("TipsManfaat");
+        //ragu
+        recyclerView = root.findViewById( R.id.recycle_view_list_home );
+        recyclerView.setLayoutManager( manager );
+        FirebaseRecyclerOptions<ItemGroup> options = new FirebaseRecyclerOptions.Builder<ItemGroup>()
+                .setQuery( myData,ItemGroup.class )
+                .build();
+
+        //adapter reycycleview 2
+        adapterGroup = new FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ItemGroupViewHolder itemGroupViewHolder, int i, @NonNull ItemGroup itemGroup) {
+                itemGroupViewHolder.headerTitle.setText( itemGroup.getHeaderTitle() );
+                FirebaseRecyclerOptions<ItemData> option2 = new FirebaseRecyclerOptions.Builder<ItemData>()
+                        .setQuery( myData.child(itemGroup.getCategoryId()).child( "data" ),ItemData.class)
+                        .build();
+
+                adapterData = new FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder>(option2) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull ItemDataViewHolder itemDataViewHolder, int i, @NonNull ItemData itemData) {
+                        itemDataViewHolder.judul.setText( itemData.getJudul() );
+
+                    }
+
+                    @NonNull
+                    @Override
+                    public ItemDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View v2 = LayoutInflater.from( getActivity() )
+                                .inflate( R.layout.layout_item_home,parent,false );
+                        return new ItemDataViewHolder( v2 );
+                    }
+                };
+                adapterData.startListening();
+                adapterData.notifyDataSetChanged();
+                itemGroupViewHolder.group_recyclerView.setAdapter( adapterData );
+
+            }
+
+            @NonNull
+            @Override
+            public ItemGroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v1 = LayoutInflater.from( getActivity() )
+                        .inflate( R.layout.layout_group_home,parent,false );
+                return new ItemGroupViewHolder( v1 );
+            }
+        };
+        adapterGroup.startListening();
+        adapterGroup.notifyDataSetChanged();
+        recyclerView.setAdapter( adapterGroup );
+
+
+
+
+
+
+        //steps init
         textSteps = (TextView) root.findViewById( R.id.tvSteps );
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService( Context.SENSOR_SERVICE );
         Sensor sensor = sensorManager.getDefaultSensor( Sensor.TYPE_ACCELEROMETER );
@@ -136,37 +209,37 @@ public class HomeFragment extends Fragment implements FirebaseLoadListenerInterf
         stepcount = sharedPreferences.getInt( "stepcount" , 0);
     }
 
-    private void getFirebaseData() {
-        dialog.show();
-        myData.addListenerForSingleValueEvent( new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<ItemGroup> itemGroups = new ArrayList<>();
-                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
-                    ItemGroup itemGroup = new ItemGroup();
-                    itemGroup.setHeaderTitle( groupSnapshot.child( "headerTitle" ).getValue( true ).toString() );
-                    GenericTypeIndicator<ArrayList<ItemData>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<ItemData>>() {
-                    };
-                    itemGroup.setListResep( groupSnapshot.child( "listResep" ).getValue( genericTypeIndicator ) );
-                    itemGroups.add( itemGroup );
-
-                }
-                firebaseLoadListenerInterface.onFirebaseLoadSucces( itemGroups );
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                firebaseLoadListenerInterface.onFirebaseLoadFailed( databaseError.getMessage() );
-            }
-        } );
-    }
-    @Override
-    public void onFirebaseLoadSucces(List<ItemGroup> itemGroupList) {
-
-        dialog.dismiss();
-    }
-    @Override
-    public void onFirebaseLoadFailed(String message) {
-        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
-        dialog.dismiss();
-    }
+//    private void getFirebaseData() {
+//        dialog.show();
+//        myData.addListenerForSingleValueEvent( new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                List<ItemGroup> itemGroups = new ArrayList<>();
+//                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
+//                    ItemGroup itemGroup = new ItemGroup();
+//                    itemGroup.setHeaderTitle( groupSnapshot.child( "headerTitle" ).getValue( true ).toString() );
+//                    GenericTypeIndicator<ArrayList<ItemData>> genericTypeIndicator = new GenericTypeIndicator<ArrayList<ItemData>>() {
+//                    };
+//                    itemGroup.setListResep( groupSnapshot.child( "listResep" ).getValue( genericTypeIndicator ) );
+//                    itemGroups.add( itemGroup );
+//
+//                }
+//                firebaseLoadListenerInterface.onFirebaseLoadSucces( itemGroups );
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                firebaseLoadListenerInterface.onFirebaseLoadFailed( databaseError.getMessage() );
+//            }
+//        } );
+//    }
+//    @Override
+//    public void onFirebaseLoadSucces(List<ItemGroup> itemGroupList) {
+//
+//        dialog.dismiss();
+//    }
+//    @Override
+//    public void onFirebaseLoadFailed(String message) {
+//        Toast.makeText( getActivity(), message, Toast.LENGTH_SHORT ).show();
+//        dialog.dismiss();
+//    }
 }

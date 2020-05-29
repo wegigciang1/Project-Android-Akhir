@@ -3,8 +3,9 @@ package com.example.easyhealthy.ui.home.Model;
 import java.util.ArrayList;
 
 public class ItemGroup {
-    private String headerTitle;
-    private ArrayList <ItemData> listResep;
+    public String headerTitle;
+    public String categoryId;
+    //private ArrayList <ItemData> listResep;
 
     public ItemGroup () {
 
@@ -12,7 +13,15 @@ public class ItemGroup {
 
     public ItemGroup(String headerTitle, ArrayList<ItemData> listResep) {
         this.headerTitle = headerTitle;
-        this.listResep = listResep;
+        //this.listResep = listResep;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getHeaderTitle() {
@@ -23,11 +32,11 @@ public class ItemGroup {
         this.headerTitle = headerTitle;
     }
 
-    public ArrayList<ItemData> getListResep() {
-        return listResep;
-    }
+//    public ArrayList<ItemData> getListResep() {
+//        return listResep;
+//    }
 
-    public void setListResep(ArrayList<ItemData> listResep) {
-        this.listResep = listResep;
-    }
+//    public void setListResep(ArrayList<ItemData> listResep) {
+//        this.listResep = listResep;
+//    }
 }
