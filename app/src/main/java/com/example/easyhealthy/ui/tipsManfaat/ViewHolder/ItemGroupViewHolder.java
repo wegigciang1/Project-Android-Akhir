@@ -15,6 +15,7 @@ public class ItemGroupViewHolder extends RecyclerView.ViewHolder {
     public RecyclerView group_recyclerView;
     public RecyclerView.LayoutManager manager;
 
+
     public ItemGroupViewHolder(@NonNull View itemView) {
         super( itemView );
 
@@ -23,4 +24,6 @@ public class ItemGroupViewHolder extends RecyclerView.ViewHolder {
         group_recyclerView = itemView.findViewById( R.id.recycle_view_list_home );
         group_recyclerView.setLayoutManager( manager );
     }
+
+
 }
