@@ -37,7 +37,7 @@ import java.util.Objects;
 
 public class RegisActivity extends AppCompatActivity {
 
-    private EditText txtnama,txtemail,txtpass,txtusia,txttinggi,txtberat;
+    private EditText txtnama, txtemail, txtpass, txtusia, txttinggi, txtberat;
     private ProgressBar progressBar;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore firebaseFirestoreDb;
@@ -66,32 +66,27 @@ public class RegisActivity extends AppCompatActivity {
         firebaseFirestoreDb = FirebaseFirestore.getInstance();
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this,R.id.editTextNamaRegis, RegexTemplate.NOT_EMPTY,R.string.invalid_name);
-        awesomeValidation.addValidation(this,R.id.editTextEmailRegis,Patterns.EMAIL_ADDRESS,R.string.invalid_email);
-        awesomeValidation.addValidation(this,R.id.editTextPassRegis, ".{6,}",R.string.invalid_pass);
-        awesomeValidation.addValidation(this,R.id.editTextUsiaRegis, Range.closed(17, 50),R.string.invalid_age);
-        awesomeValidation.addValidation(this,R.id.editTextTinggiRegis, Range.closed(140, 190),R.string.invalid_height);
-        awesomeValidation.addValidation(this,R.id.editTextBeratRegis, Range.closed(30, 70),R.string.invalid_weight);
+        awesomeValidation.addValidation(this, R.id.editTextNamaRegis, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
+        awesomeValidation.addValidation(this, R.id.editTextEmailRegis, Patterns.EMAIL_ADDRESS, R.string.invalid_email);
+        awesomeValidation.addValidation(this, R.id.editTextPassRegis, ".{6,}", R.string.invalid_pass);
+        awesomeValidation.addValidation(this, R.id.editTextUsiaRegis, Range.closed(17, 50), R.string.invalid_age);
+        awesomeValidation.addValidation(this, R.id.editTextTinggiRegis, Range.closed(140, 190), R.string.invalid_height);
+        awesomeValidation.addValidation(this, R.id.editTextBeratRegis, Range.closed(30, 70), R.string.invalid_weight);
 
         btnRegis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int radioId = groupJnsKlmin.getCheckedRadioButtonId();
                 radioJnsKlmin = findViewById(radioId);
-                if(radioId == -1){
+                if (radioId == -1) {
                     Toast.makeText(RegisActivity.this, String.valueOf(radioId), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(awesomeValidation.validate()){
-                    final String nama = txtnama.getText().toString();
+                if (awesomeValidation.validate()) {
                     String email = txtemail.getText().toString();
                     String pass = txtpass.getText().toString();
-                    final String usia = txtusia.getText().toString();
-                    final String jns_kelamin = radioJnsKlmin.getText().toString();
-                    final String tinggi = txttinggi.getText().toString();
                     final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
                     final Date date = new Date();
-
 
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -100,23 +95,26 @@ public class RegisActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 UserID = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
-                                Map<String,Object> user = new HashMap<>();
-                                user.put("Nama",nama);
-                                user.put("Usia",usia);
-                                user.put("Jenis Kelamin",jns_kelamin);
-                                user.put("Tinggi Badan",tinggi);
-                                user.put("FotoKey", "");
 
-                                Map<String, Object> beratTanggal = new HashMap<>();
-                                beratTanggal.put("Berat", txtberat.getText().toString());
-                                beratTanggal.put("Tanggal", sdf.format(date));
-                                beratTanggal.put("id", UserID);
+                                Map<String, Object> user = new HashMap<>();
+                                user.put("Nama", txtnama.getText().toString());
+                                user.put("Usia", txtusia.getText().toString());
+                                user.put("Jenis Kelamin", radioJnsKlmin.getText().toString());
+                                user.put("Tinggi Badan", txttinggi.getText().toString());
+                                user.put("FotoKey", "");
+                                user.put("Rencana", "");
+                                user.put("Target", "");
+
+                                Map<String, Object> beratUser = new HashMap<>();
+                                beratUser.put("berat", txtberat.getText().toString());
+                                beratUser.put("tanggal", sdf.format(date));
+                                beratUser.put("id", UserID);
 
                                 firebaseFirestoreDb.collection("Users").document(UserID).set(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.d("TAG", "Berhasil : "+UserID);
+                                                Log.d("TAG", "Berhasil : " + UserID);
 
                                             }
                                         })
@@ -126,7 +124,7 @@ public class RegisActivity extends AppCompatActivity {
                                                 Log.d("TAG", e.toString());
                                             }
                                         });
-                                firebaseFirestoreDb.collection("Berat Badan").document().set(beratTanggal)
+                                firebaseFirestoreDb.collection("Berat Badan").document().set(beratUser)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -146,12 +144,12 @@ public class RegisActivity extends AppCompatActivity {
                             } else {
                                 try {
                                     throw Objects.requireNonNull(task.getException());
-                                }catch (FirebaseAuthUserCollisionException e){
-                                    Toast.makeText(getApplicationContext(),"Email is Already Exist", Toast.LENGTH_SHORT).show();
-                                }catch (FirebaseNetworkException e){
-                                    Toast.makeText(getApplicationContext(),"Your Network is Disconnect", Toast.LENGTH_SHORT).show();
+                                } catch (FirebaseAuthUserCollisionException e) {
+                                    Toast.makeText(getApplicationContext(), "Email is Already Exist", Toast.LENGTH_SHORT).show();
+                                } catch (FirebaseNetworkException e) {
+                                    Toast.makeText(getApplicationContext(), "Your Network is Disconnect", Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -162,4 +160,5 @@ public class RegisActivity extends AppCompatActivity {
             }
         });
     }
+
 }

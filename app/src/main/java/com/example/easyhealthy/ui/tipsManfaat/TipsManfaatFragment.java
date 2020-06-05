@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
-import com.example.easyhealthy.ui.home.ViewHolder.ItemDataViewHolder;
-import com.example.easyhealthy.ui.home.ViewHolder.ItemGroupViewHolder;
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
+import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemDataViewHolder;
+import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemGroupViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -38,8 +38,6 @@ public class TipsManfaatFragment extends Fragment{
     FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder> adapterGroup;
     FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder> adapterData;
     RecyclerView.LayoutManager manager;
-
-
 
     AlertDialog dialog;
     FirebaseLoadListenerInterface firebaseLoadListenerInterface;
@@ -63,7 +61,7 @@ public class TipsManfaatFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
         //view
-        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_list_home );
+        my_reycycler_view = root.findViewById(R.id.recycle_view_list_home);
         my_reycycler_view.setHasFixedSize( true );
         my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
@@ -129,7 +127,7 @@ public class TipsManfaatFragment extends Fragment{
 
 
         //steps init
-        textSteps = (TextView) root.findViewById( R.id.tvSteps );
+        textSteps = root.findViewById(R.id.tvSteps);
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService( Context.SENSOR_SERVICE );
         Sensor sensor = sensorManager.getDefaultSensor( Sensor.TYPE_ACCELEROMETER );
 

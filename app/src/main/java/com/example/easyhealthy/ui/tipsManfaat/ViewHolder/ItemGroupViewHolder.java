@@ -1,4 +1,4 @@
-package com.example.easyhealthy.ui.home.ViewHolder;
+package com.example.easyhealthy.ui.tipsManfaat.ViewHolder;
 
 import android.view.View;
 import android.widget.TextView;
