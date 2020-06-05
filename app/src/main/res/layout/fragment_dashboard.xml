@@ -202,7 +202,138 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:visibility="visible">
+            android:background="@drawable/kaloribackground"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewBeratA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2323"
+                    android:textColor="#000"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/textViewKeteranganA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eaten"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginRight="70dp"
+                android:layout_toRightOf="@+id/layout1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewBeratB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2323"
+                    android:textColor="#000"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/textViewKeteranganB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kalori"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_toRightOf="@+id/layout2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewBeratC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2323"
+                    android:textColor="#000"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/textViewKeteranganC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Burned"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/masukkanTanggal"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/layout2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:hint="Date"
+                android:importantForAutofill="no"
+                android:inputType="date" />
+
+            <Button
+                android:id="@+id/btnPilihTanggal"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@+id/masukkanTanggal"
+                android:layout_alignStart="@id/masukkanTanggal"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button"
+                android:text="Input"
+                android:textColor="#FFFDFD"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/gambarsteps"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/layout1"
+                android:layout_alignStart="@id/layout1"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="270dp"
+                android:src="@drawable/iconswalk" />
+
+            <TextView
+                android:id="@+id/txtLangkahkaki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="380dp"
+                android:layout_toRightOf="@id/gambarsteps"
+                android:text="Langkah Kaki"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/langkahKaki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtLangkahkaki"
+                android:layout_alignEnd="@id/txtLangkahkaki"
+                android:layout_marginEnd="40dp"
+                android:text="50"
+                android:textSize="34sp" />
 
 
         </RelativeLayout>

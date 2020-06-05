@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.easyhealthy.AboutButtonActivity;
-import com.example.easyhealthy.KaloriTestActivity;
 import com.example.easyhealthy.LoginActivity;
 import com.example.easyhealthy.PasswordChangesButtonActivity;
 import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
+import com.example.easyhealthy.RencanaActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -128,8 +130,23 @@ public class ProfileFragment extends Fragment {
         btnCancelRencana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent halAbout = new Intent(getActivity(), KaloriTestActivity.class);
-                startActivity(halAbout);
+                DocumentReference washingtonRef = fStore.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
+                washingtonRef
+                        .update("Rencana", "")
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Intent halAwal = new Intent(getActivity(), RencanaActivity.class);
+                                startActivity(halAwal);
+                                getActivity().finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        });
+
             }
         });
 
