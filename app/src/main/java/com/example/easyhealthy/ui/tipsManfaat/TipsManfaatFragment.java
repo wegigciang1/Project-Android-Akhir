@@ -23,7 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
+
 import com.example.easyhealthy.interfaces.SubGroupOnClickInterface;
+
+
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
 import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemDataViewHolder;
@@ -63,7 +66,7 @@ public class TipsManfaatFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
         //view
-        my_reycycler_view = (RecyclerView) root.findViewById( R.id.recycle_view_list_home );
+        my_reycycler_view = root.findViewById(R.id.recycle_view_list_home);
         my_reycycler_view.setHasFixedSize( true );
         my_reycycler_view.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
@@ -147,7 +150,7 @@ public class TipsManfaatFragment extends Fragment{
 
 
         //steps init
-        textSteps = (TextView) root.findViewById( R.id.tvSteps );
+        textSteps = root.findViewById(R.id.tvSteps);
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService( Context.SENSOR_SERVICE );
         Sensor sensor = sensorManager.getDefaultSensor( Sensor.TYPE_ACCELEROMETER );
 
