@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <EditText
                 android:id="@+id/inputBeratHarian"
@@ -203,7 +203,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:background="@drawable/kaloribackground"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/layout1"

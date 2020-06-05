@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:background="#F1F1F1"
     tools:context=".ui.tipsManfaat.TipsManfaatFragment">
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewStep"
-        android:layout_width="250dp"
-        android:layout_height="80dp"
-        android:layout_margin="15dp"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="10dp">
-        <TextView
-            android:id="@+id/tvSteps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:textColor="#000000"
-            android:textSize="20dp"
-            android:layout_centerInParent="true"/>
-    </androidx.cardview.widget.CardView>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/cardViewStep"
         android:id="@+id/recycle_view_list_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

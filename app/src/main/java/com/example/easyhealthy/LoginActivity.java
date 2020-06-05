@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.example.easyhealthy.interfaces.OnGeekEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
@@ -31,7 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity implements OnGeekEventListener {
+public class LoginActivity extends AppCompatActivity {
     private EditText email, password, emailForgetPass;
     private ProgressBar progressBar;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
@@ -39,27 +38,7 @@ public class LoginActivity extends AppCompatActivity implements OnGeekEventListe
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private AwesomeValidation awesomeValidation;
 
-    private void tesData(final OnGeekEventListener mListener) {
-        if (mFirebaseAuth.getCurrentUser() != null) {
-            DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String rencana = (String) document.get("Rencana");
-                            mListener.onGeekEvent(rencana);
-                        } else {
 
-                        }
-                    } else {
-
-                    }
-                }
-            });
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements OnGeekEventListe
                                             if (document.exists()) {
                                                 String rencana = (String) document.get("Rencana");
                                                 if (rencana.isEmpty()) {
+                                                    Bundle bundle = new Bundle();
                                                     Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
                                                     startActivity(halAwal);
                                                     finish();
@@ -179,27 +159,6 @@ public class LoginActivity extends AppCompatActivity implements OnGeekEventListe
 
         });
 
-        tesData(new OnGeekEventListener() {
-            @Override
-            public void onGeekEvent(String s) {
-                if (s.isEmpty()) {
-                    Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
-                    startActivity(halAwal);
-                    finish();
-                } else {
-                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(halUtama);
-                    finish();
-                }
-
-            }
-        });
-
     }
 
-
-    @Override
-    public void onGeekEvent(String s) {
-
-    }
 }
