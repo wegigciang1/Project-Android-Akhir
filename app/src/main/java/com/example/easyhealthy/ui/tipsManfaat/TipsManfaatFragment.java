@@ -2,6 +2,7 @@ package com.example.easyhealthy.ui.tipsManfaat;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,12 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.easyhealthy.R;
 import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
-import com.example.easyhealthy.ui.home.ViewHolder.ItemDataViewHolder;
-import com.example.easyhealthy.ui.home.ViewHolder.ItemGroupViewHolder;
+import com.example.easyhealthy.interfaces.SubGroupOnClickInterface;
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
 import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
+import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemDataViewHolder;
+import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemGroupViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +43,6 @@ public class TipsManfaatFragment extends Fragment{
     RecyclerView.LayoutManager manager;
 
 
-
     AlertDialog dialog;
     FirebaseLoadListenerInterface firebaseLoadListenerInterface;
 
@@ -54,8 +56,6 @@ public class TipsManfaatFragment extends Fragment{
     private  Integer stepcount=0;
     public ImageView itemImage;
 
-    //coba coba
-//    List<ItemGroup> itemGroupList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class TipsManfaatFragment extends Fragment{
         //adapter reycycleview 2
         adapterGroup = new FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull ItemGroupViewHolder itemGroupViewHolder, int i, @NonNull ItemGroup itemGroup) {
+            protected void onBindViewHolder(@NonNull ItemGroupViewHolder itemGroupViewHolder, int i, @NonNull final ItemGroup itemGroup) {
                 itemGroupViewHolder.headerTitle.setText( itemGroup.getHeaderTitle() );
                 FirebaseRecyclerOptions<ItemData> option2 = new FirebaseRecyclerOptions.Builder<ItemData>()
                         .setQuery( myData.child(itemGroup.getCategoryId()).child( "data" ),ItemData.class)
@@ -92,8 +92,29 @@ public class TipsManfaatFragment extends Fragment{
 
                 adapterData = new FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder>(option2) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ItemDataViewHolder itemDataViewHolder, int i, @NonNull ItemData itemData) {
+                    protected void onBindViewHolder(@NonNull ItemDataViewHolder itemDataViewHolder, int i, @NonNull final ItemData itemData) {
                         itemDataViewHolder.judul.setText( itemData.getJudul() );
+
+                        String url = itemData.getImage();
+                        if (url != "") {
+                            Glide
+                                    .with(getContext()) // get context of Fragment
+                                    .load(url)
+                                    .into(itemDataViewHolder.image);
+                        }
+
+                        itemDataViewHolder.SubGroupOnClickInterface( new SubGroupOnClickInterface() {
+                            @Override
+                            public void onClick(View view, boolean isLongPressed) {
+                                Intent intent = new Intent( getActivity(), DataDisplay.class );
+                                intent.putExtra( "judul", itemData.getJudul() );
+                                //String tamp = itemData.getVideo();
+                                intent.putExtra( "video", itemData.getVideo() );
+                                intent.putExtra( "detail",itemData.getDetail() );
+                                intent.putExtra( "label",itemGroup.getCategoryId() );
+                                startActivity( intent );
+                            }
+                        } );
 
                     }
 
@@ -122,9 +143,6 @@ public class TipsManfaatFragment extends Fragment{
         adapterGroup.startListening();
         adapterGroup.notifyDataSetChanged();
         recyclerView.setAdapter( adapterGroup );
-
-
-
 
 
 

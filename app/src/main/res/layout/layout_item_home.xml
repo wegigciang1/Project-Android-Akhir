@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="140dp"
-            android:layout_height="94dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_launcher" />
