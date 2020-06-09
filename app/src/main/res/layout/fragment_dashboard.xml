@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <EditText
                 android:id="@+id/inputBeratHarian"
@@ -192,8 +192,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycle_view_tampil_berat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/inputBeratHarian"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp" />
         </RelativeLayout>
 
@@ -203,7 +204,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:background="@drawable/kaloribackground"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/layout1"
@@ -214,7 +215,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textViewBeratA"
+                    android:id="@+id/textViewEaten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2323"
@@ -222,7 +223,7 @@
                     android:textSize="25dp" />
 
                 <TextView
-                    android:id="@+id/textViewKeteranganA"
+                    android:id="@+id/textViewKeteranganEaten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Eaten"
@@ -241,7 +242,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textViewBeratB"
+                    android:id="@+id/textViewKalori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2323"
@@ -249,7 +250,7 @@
                     android:textSize="25dp" />
 
                 <TextView
-                    android:id="@+id/textViewKeteranganB"
+                    android:id="@+id/textViewKeteranganKalori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="kalori"
@@ -265,7 +266,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textViewBeratC"
+                    android:id="@+id/textViewBurned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2323"
@@ -273,7 +274,7 @@
                     android:textSize="25dp" />
 
                 <TextView
-                    android:id="@+id/textViewKeteranganC"
+                    android:id="@+id/textViewKeteranganBurned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Burned"

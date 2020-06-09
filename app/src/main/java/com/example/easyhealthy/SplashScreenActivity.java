@@ -9,11 +9,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +47,37 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent goToActivityLogin = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                startActivity(goToActivityLogin);
-                finish();
+                if (mFirebaseAuth.getCurrentUser() != null) {
+                    DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String rencana = (String) document.get("Rencana");
+                                    if (rencana.isEmpty()) {
+                                        Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
+                                        startActivity(halAwal);
+                                        finish();
+                                    } else {
+                                        Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(halUtama);
+                                        finish();
+                                    }
+                                } else {
+
+                                }
+                            } else {
+
+                            }
+                        }
+                    });
+                } else {
+                    Intent goToActivityLogin = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    startActivity(goToActivityLogin);
+                    finish();
+                }
             }
         }, SPLASH_SCREEN_TIME);
     }

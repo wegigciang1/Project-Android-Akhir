@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#f1f1f1">
 
-    <TextView
-        android:id="@+id/tanggalInputRecycle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tanggal"
-        android:textSize="25sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp">
 
-    <TextView
-        android:id="@+id/beratInputRecycle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Berat"
-        android:textSize="25sp"
-        android:layout_marginStart="10dp" />
+        <TextView
+            android:id="@+id/tanggalInputRecycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal"
+            android:textSize="24sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/pembatas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="-"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/beratInputRecycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Berat"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
