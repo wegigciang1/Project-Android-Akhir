@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
@@ -28,25 +29,26 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText email, password, emailForgetPass;
     private ProgressBar progressBar;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
-
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    private AwesomeValidation awesomeValidation;
-
+    private AwesomeValidation awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editTextPass);
-        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+        final EditText email = findViewById(R.id.editTextEmail);
+        final EditText password = findViewById(R.id.editTextPass);
         awesomeValidation.addValidation(this, R.id.editTextEmail, Patterns.EMAIL_ADDRESS, R.string.invalid_email);
         awesomeValidation.addValidation(this, R.id.editTextPass, ".{6,}", R.string.invalid_pass);
 
@@ -60,43 +62,21 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (awesomeValidation.validate()) {
-                    String email_ = email.getText().toString();
-                    String pass = password.getText().toString();
-
+                    final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                    final Date date = new Date();
                     progressBar.setVisibility(View.VISIBLE);
 
-                    mFirebaseAuth.signInWithEmailAndPassword(email_, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mFirebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                email.getText().clear();
-                                password.getText().clear();
-                                DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
-                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                String rencana = (String) document.get("Rencana");
-                                                if (rencana.isEmpty()) {
-                                                    Bundle bundle = new Bundle();
-                                                    Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
-                                                    startActivity(halAwal);
-                                                    finish();
-                                                } else {
-                                                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                                                    startActivity(halUtama);
-                                                    finish();
-                                                }
-                                            } else {
 
-                                            }
-                                        } else {
+                                final DocumentReference collref = mFirebaseFirestore.collection("Kalori")
+                                        .document(mFirebaseAuth.getCurrentUser().getUid())
+                                        .collection(sdf.format(date))
+                                        .document(mFirebaseAuth.getCurrentUser().getUid());
+                                cekDataRencana(collref);
 
-                                        }
-                                    }
-                                });
                             } else {
                                 try {
                                     throw Objects.requireNonNull(task.getException());
@@ -130,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 final View dialogForgetPass = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
-                emailForgetPass = dialogForgetPass.findViewById(R.id.editTextEmailForgetPass);
+                final EditText emailForgetPass = dialogForgetPass.findViewById(R.id.editTextEmailForgetPass);
 
                 builder.setView(dialogForgetPass);
                 builder.setTitle("Forget Password");
@@ -159,6 +139,63 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    private void cekDataRencana(final DocumentReference collref) {
+        DocumentReference docRef = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String rencana = (String) document.get("Rencana");
+                        if (rencana.isEmpty()) {
+                            Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
+                            startActivity(halAwal);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            finish();
+                        } else {
+                            collref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+                                            halUtama.putExtra("eaten", (String) document.get("eaten"));
+                                            halUtama.putExtra("kalori", (String) document.get("kaloriHarian"));
+                                            halUtama.putExtra("burned", (String) document.get("burned"));
+                                            startActivity(halUtama);
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            finish();
+                                        } else {
+                                            Map<String, Object> dataAwal = new HashMap<>();
+                                            dataAwal.put("burned", "0");
+                                            dataAwal.put("eaten", "0");
+                                            dataAwal.put("kaloriHarian", "0");
+                                            collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+                                                    halUtama.putExtra("eaten", "0");
+                                                    halUtama.putExtra("kalori", "0");
+                                                    halUtama.putExtra("burned", "0");
+                                                    startActivity(halUtama);
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }

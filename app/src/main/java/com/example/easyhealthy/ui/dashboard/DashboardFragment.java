@@ -1,6 +1,7 @@
 package com.example.easyhealthy.ui.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -20,12 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.ui.dashboard.Model_dashboard.DataBerat;
-import com.example.easyhealthy.ui.dashboard.ViewHolder.DataBeratViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -39,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -59,7 +61,7 @@ public class DashboardFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
-    private FirebaseRecyclerAdapter<DataBerat, DataBeratViewHolder> adapterGroup;
+    private FirestoreRecyclerAdapter adapterGroup;
 
     private double MagnitudePrevious = 0;
     private Integer stepcount = 0;
@@ -67,41 +69,36 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-//        recyclerView = root.findViewById(R.id.recycle_view_tampil_berat);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//        FirestoreRecyclerOptions<DataBerat> options = new FirestoreRecyclerOptions.Builder<DataBerat>()
-//                .setQuery(collref, DataBerat.class)
-//                .build();
-//
-//        adapterGroup = new FirebaseRecyclerAdapter<DataBerat, DataBeratViewHolder>(options) {
-//
-//
-//            @Override
-//            protected void onBindViewHolder(@NonNull DataBeratViewHolder dataBeratViewHolder, int i, @NonNull DataBerat dataBerat) {
-//                dataBeratViewHolder.berat.setText(dataBerat.getBerat());
-//                dataBeratViewHolder.tanggal.setText(String.valueOf(dataBerat.getTanggal()));
-//            }
-//
-//            @NonNull
-//            @Override
-//            public DataBeratViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                View view = LayoutInflater.from(parent.getContext()).inflate(
-//                        R.layout.berat_item, parent, false
-//                );
-//                return new DataBeratViewHolder(view);
-//            }
-//
-//
-//        };
-//        adapterGroup.startListening();
-//        adapterGroup.notifyDataSetChanged();
-//        recyclerView.setAdapter(adapterGroup);
+        recyclerView = root.findViewById(R.id.recycle_view_tampil_berat);
+
+
+        Query query = collref.whereEqualTo("id", userID);
+
+        FirestoreRecyclerOptions<DataBerat> options = new FirestoreRecyclerOptions.Builder<DataBerat>()
+                .setQuery(query, DataBerat.class)
+                .build();
+
+        adapterGroup = new FirestoreRecyclerAdapter<DataBerat, DataBeratViewHolder>(options) {
+
+            @NonNull
+            @Override
+            public DataBeratViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.berat_item, parent, false);
+                return new DataBeratViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull DataBeratViewHolder holder, int position, @NonNull DataBerat model) {
+                holder.berat.setText(model.getBerat());
+                holder.tanggal.setText(model.getTanggal());
+            }
+        };
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapterGroup);
 
         return root;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -111,11 +108,19 @@ public class DashboardFragment extends Fragment {
         CardView pilihInputRiwayat = view.findViewById(R.id.pilihInputRiwayat);
         CardView pilihKalori = view.findViewById(R.id.pilihKalori);
         final TextView langkahKaki = view.findViewById(R.id.langkahKaki);
+        final TextView eaten = view.findViewById(R.id.textViewEaten);
+        final TextView kalori = view.findViewById(R.id.textViewKalori);
+        final TextView burned = view.findViewById(R.id.textViewBurned);
         final RelativeLayout tampilkanInputRiwayat = view.findViewById(R.id.tampilkanInputRiwayat);
         final RelativeLayout tampilkanKalori = view.findViewById(R.id.tampilkanKalori);
         final LineChart tampilBerat = view.findViewById(R.id.tampilGrafikBerat);
         final EditText inputBeratHarian = view.findViewById(R.id.inputBeratHarian);
         Button btnInputBeratHarian = view.findViewById(R.id.btnInputBeratHarian);
+
+        final Intent intent = getActivity().getIntent();
+        eaten.setText(intent.getStringExtra("eaten"));
+        kalori.setText(intent.getStringExtra("kalori"));
+        burned.setText(intent.getStringExtra("burned"));
 
 
         isiGrafik(collref, tampilBerat, userID);
@@ -187,31 +192,6 @@ public class DashboardFragment extends Fragment {
         sensorManager.registerListener(stepDetector, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public void onPause() {
-        super.onPause();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.putInt("stepcount", stepcount);
-        editor.apply();
-    }
-
-    public void onStop() {
-        super.onStop();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.putInt("stepcount", stepcount);
-        editor.apply();
-    }
-
-    public void onResume() {
-        super.onResume();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        stepcount = sharedPreferences.getInt("stepcount", 0);
-    }
-
-
     private void tambahBerat(EditText inputHarian, final String userId, final LineChart tampilBerat, final CollectionReference collref) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
         Date date = new Date();
@@ -219,6 +199,7 @@ public class DashboardFragment extends Fragment {
         beratHarian.put("berat", inputHarian.getText().toString());
         beratHarian.put("tanggal", sdf.format(date));
         beratHarian.put("id", userId);
+
 
         collref
                 .add(beratHarian)
@@ -236,6 +217,12 @@ public class DashboardFragment extends Fragment {
                     }
                 });
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapterGroup.startListening();
     }
 
     private void isiGrafik(CollectionReference collref, final LineChart tampilBerat, String userId) {
@@ -263,5 +250,42 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.putInt("stepcount", stepcount);
+        editor.apply();
+        adapterGroup.stopListening();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.putInt("stepcount", stepcount);
+        editor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        stepcount = sharedPreferences.getInt("stepcount", 0);
+    }
+
+    private class DataBeratViewHolder extends RecyclerView.ViewHolder {
+        TextView berat;
+        TextView tanggal;
+
+        public DataBeratViewHolder(@NonNull View itemView) {
+            super(itemView);
+            berat = itemView.findViewById(R.id.beratInputRecycle);
+            tanggal = itemView.findViewById(R.id.tanggalInputRecycle);
+        }
+    }
 }

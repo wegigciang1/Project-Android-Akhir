@@ -1,138 +1,71 @@
 package com.example.easyhealthy.ui.tipsManfaat;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.interfaces.FirebaseLoadListenerInterface;
-import com.example.easyhealthy.interfaces.SubGroupOnClickInterface;
-import com.example.easyhealthy.ui.tipsManfaat.Model.ItemData;
-import com.example.easyhealthy.ui.tipsManfaat.Model.ItemGroup;
-import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemDataViewHolder;
-import com.example.easyhealthy.ui.tipsManfaat.ViewHolder.ItemGroupViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-public class TipsManfaatFragment extends Fragment{
-
-    //coba reycle view 2
-    FirebaseDatabase database;
-    RecyclerView recyclerView;
-    FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder> adapterGroup;
-    FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder> adapterData;
-    RecyclerView.LayoutManager manager;
+public class TipsManfaatFragment extends Fragment {
 
 
-    AlertDialog dialog;
-    FirebaseLoadListenerInterface firebaseLoadListenerInterface;
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
 
-    RecyclerView my_reycycler_view;
+        CardView tampilkanBreakfast = root.findViewById(R.id.breakfeast);
+        CardView tampilkanLunch = root.findViewById(R.id.lunch);
+        CardView tampilkanDinner = root.findViewById(R.id.dinner);
+        CardView tampilkanWorkout = root.findViewById(R.id.workout);
 
-    DatabaseReference myData;
-
-    public ImageView itemImage;
-
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
-        View root = inflater.inflate(R.layout.fragment_tipsmanfaat, container, false);
-
-        //view
-        my_reycycler_view = root.findViewById(R.id.recycle_view_list_home);
-        my_reycycler_view.setHasFixedSize(true);
-        my_reycycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
-        //steps
-        //coba reycleview 2
-        manager = new LinearLayoutManager(getActivity());
-        database = FirebaseDatabase.getInstance();
-        myData = database.getReference("TipsManfaat");
-        //ragu
-        recyclerView = root.findViewById(R.id.recycle_view_list_home);
-        recyclerView.setLayoutManager(manager);
-        FirebaseRecyclerOptions<ItemGroup> options = new FirebaseRecyclerOptions.Builder<ItemGroup>()
-                .setQuery(myData, ItemGroup.class)
-                .build();
-
-        //adapter reycycleview 2
-        adapterGroup = new FirebaseRecyclerAdapter<ItemGroup, ItemGroupViewHolder>(options) {
+        tampilkanBreakfast.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected void onBindViewHolder(@NonNull ItemGroupViewHolder itemGroupViewHolder, int i, @NonNull final ItemGroup itemGroup) {
-                itemGroupViewHolder.headerTitle.setText(itemGroup.getHeaderTitle());
-                FirebaseRecyclerOptions<ItemData> option2 = new FirebaseRecyclerOptions.Builder<ItemData>()
-                        .setQuery(myData.child(itemGroup.getCategoryId()).child("data"), ItemData.class)
-                        .build();
-
-                adapterData = new FirebaseRecyclerAdapter<ItemData, ItemDataViewHolder>(option2) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull ItemDataViewHolder itemDataViewHolder, int i, @NonNull final ItemData itemData) {
-                        itemDataViewHolder.judul.setText(itemData.getJudul());
-
-                        String url = itemData.getImage();
-                        if (url != "") {
-                            Glide
-                                    .with(getContext()) // get context of Fragment
-                                    .load(url)
-                                    .into(itemDataViewHolder.image);
-                        }
-
-                        itemDataViewHolder.SubGroupOnClickInterface(new SubGroupOnClickInterface() {
-                            @Override
-                            public void onClick(View view, boolean isLongPressed) {
-                                Intent intent = new Intent(getActivity(), DataDisplay.class);
-                                intent.putExtra("judul", itemData.getJudul());
-                                //String tamp = itemData.getVideo();
-                                intent.putExtra("video", itemData.getVideo());
-                                intent.putExtra("detail", itemData.getDetail());
-                                intent.putExtra("label", itemGroup.getCategoryId());
-                                startActivity(intent);
-                            }
-                        });
-
-                    }
-
-                    @NonNull
-                    @Override
-                    public ItemDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View v2 = LayoutInflater.from(getActivity())
-                                .inflate(R.layout.layout_item_home, parent, false);
-                        return new ItemDataViewHolder(v2);
-                    }
-                };
-                adapterData.startListening();
-                adapterData.notifyDataSetChanged();
-                itemGroupViewHolder.group_recyclerView.setAdapter(adapterData);
-
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("data", "Breakfeast");
+                Navigation.findNavController(root).navigate(R.id.action_navigation_home_to_seeAllFragment, bundle);
             }
+        });
 
-            @NonNull
+        tampilkanLunch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public ItemGroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View v1 = LayoutInflater.from(getActivity())
-                        .inflate(R.layout.layout_group_home, parent, false);
-                return new ItemGroupViewHolder(v1);
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("data", "Lunch");
+                Navigation.findNavController(root).navigate(R.id.action_navigation_home_to_seeAllFragment, bundle);
             }
-        };
-        adapterGroup.startListening();
-        adapterGroup.notifyDataSetChanged();
-        recyclerView.setAdapter(adapterGroup);
+        });
+
+        tampilkanDinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("data", "Dinner");
+                Navigation.findNavController(root).navigate(R.id.action_navigation_home_to_seeAllFragment, bundle);
+            }
+        });
+
+        tampilkanWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("data", "Workout");
+                Navigation.findNavController(root).navigate(R.id.action_navigation_home_to_seeAllFragment, bundle);
+            }
+        });
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
     }
 

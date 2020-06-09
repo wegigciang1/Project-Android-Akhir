@@ -37,13 +37,11 @@ import java.util.Objects;
 
 public class RegisActivity extends AppCompatActivity {
 
-    private EditText txtnama, txtemail, txtpass, txtusia, txttinggi, txtberat;
     private ProgressBar progressBar;
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseFirestore firebaseFirestoreDb;
-    private AwesomeValidation awesomeValidation;
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore firebaseFirestoreDb = FirebaseFirestore.getInstance();
+    private AwesomeValidation awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
     private String UserID;
-    private RadioGroup groupJnsKlmin;
     private RadioButton radioJnsKlmin;
 
     @Override
@@ -51,21 +49,16 @@ public class RegisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regis);
 
-        txtnama = findViewById(R.id.editTextNamaRegis);
-        txtemail = findViewById(R.id.editTextEmailRegis);
-        txtpass = findViewById(R.id.editTextPassRegis);
-        txtusia = findViewById(R.id.editTextUsiaRegis);
-        groupJnsKlmin = findViewById(R.id.radioGroup);
-        txttinggi = findViewById(R.id.editTextTinggiRegis);
-        txtberat = findViewById(R.id.editTextBeratRegis);
+        final EditText txtnama = findViewById(R.id.editTextNamaRegis);
+        final EditText txtemail = findViewById(R.id.editTextEmailRegis);
+        final EditText txtpass = findViewById(R.id.editTextPassRegis);
+        final EditText txtusia = findViewById(R.id.editTextUsiaRegis);
+        final RadioGroup groupJnsKlmin = findViewById(R.id.radioGroup);
+        final EditText txttinggi = findViewById(R.id.editTextTinggiRegis);
+        final EditText txtberat = findViewById(R.id.editTextBeratRegis);
         Button btnRegis = findViewById(R.id.btnRegis);
 
         progressBar = findViewById(R.id.progressBarRegis);
-
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestoreDb = FirebaseFirestore.getInstance();
-
-        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.editTextNamaRegis, RegexTemplate.NOT_EMPTY, R.string.invalid_name);
         awesomeValidation.addValidation(this, R.id.editTextEmailRegis, Patterns.EMAIL_ADDRESS, R.string.invalid_email);
         awesomeValidation.addValidation(this, R.id.editTextPassRegis, ".{6,}", R.string.invalid_pass);
@@ -83,14 +76,12 @@ public class RegisActivity extends AppCompatActivity {
                     return;
                 }
                 if (awesomeValidation.validate()) {
-                    String email = txtemail.getText().toString();
-                    String pass = txtpass.getText().toString();
                     final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
                     final Date date = new Date();
 
                     progressBar.setVisibility(View.VISIBLE);
 
-                    mFirebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mFirebaseAuth.createUserWithEmailAndPassword(txtemail.getText().toString(), txtpass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {

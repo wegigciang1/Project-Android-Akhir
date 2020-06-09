@@ -78,6 +78,8 @@ public class ProfileFragment extends Fragment {
                             Glide
                                     .with(getContext()) // get context of Fragment
                                     .load(url)
+                                    .circleCrop()
+
                                     .into(fotoProfile);
                         }
                         String name = (String) document.get("Nama");

@@ -21,10 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
-
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +81,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     startActivity(goToActivityLogin);
                     finish();
                 }
-
-
             }
         }, SPLASH_SCREEN_TIME);
     }
