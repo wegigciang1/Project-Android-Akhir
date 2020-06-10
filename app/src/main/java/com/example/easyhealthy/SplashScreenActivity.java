@@ -31,6 +31,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +52,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         //untuk mengaktifkan splash screen yang berlangsung 5 detik dan lempar ke activity Login
         //Pengenalan variable
         // 5 detik
+
         int SPLASH_SCREEN_TIME = 5000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 if (mFirebaseAuth.getCurrentUser() != null) {
                     final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
                     final Date date = new Date();

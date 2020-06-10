@@ -63,7 +63,6 @@ public class TipsManfaatFragment extends Fragment {
         return root;
     }
 
-
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
