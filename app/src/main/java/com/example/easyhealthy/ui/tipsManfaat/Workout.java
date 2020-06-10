@@ -31,7 +31,7 @@ import ticker.views.com.ticker.widgets.circular.timer.view.CircularView;
 public class Workout extends AppCompatActivity {
 
     Button pause;
-    Button finish,resume;
+    Button finish,resume,start;
     CircularView circularViewWithTimer;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
@@ -44,13 +44,16 @@ public class Workout extends AppCompatActivity {
         //intent
         final Intent intent = getIntent();
         final String tempKalori = intent.getStringExtra("kalori");
-
+        start =findViewById( R.id.startWorkout );
         pause =findViewById( R.id.pauseWorkout );
         finish=findViewById( R.id.finishWorkout );
         resume=findViewById( R.id.resumeWorkout );
+        finish.setVisibility( View.INVISIBLE );
+        pause.setVisibility( View.INVISIBLE );
+        resume.setVisibility( View.INVISIBLE );
 
         circularViewWithTimer = findViewById(R.id.progressBarWorkout);
-        circularViewWithTimer.startTimer();
+
         CircularView.OptionsBuilder builderWithTimer =
                 new CircularView.OptionsBuilder()
                         .shouldDisplayText(true)
@@ -74,6 +77,13 @@ public class Workout extends AppCompatActivity {
 
         circularViewWithTimer.setOptions(builderWithTimer);
 
+        start.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                circularViewWithTimer.startTimer();
+                pause.setVisibility( View.VISIBLE );
+            }
+        } );
         pause.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +102,7 @@ public class Workout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //intent update
-                final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
                 final Date date = new Date();
 
                 final DocumentReference collref = mFirebaseFirestore.collection("Kalori").document( Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection(sdf.format(date)).document(mFirebaseAuth.getCurrentUser().getUid());
@@ -127,9 +137,9 @@ public class Workout extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent goToMainActivity = new Intent(Workout.this, MainActivity.class);
-                        goToMainActivity.putExtra("burned", String.valueOf(total));
-                        goToMainActivity.putExtra("kalori", String.valueOf(totalKalori));
-                        goToMainActivity.putExtra("burned", "0");
+//                        goToMainActivity.putExtra("burned", String.valueOf(total));
+//                        goToMainActivity.putExtra("kalori", String.valueOf(totalKalori));
+//                        goToMainActivity.putExtra("burned", "0");
                         startActivity(goToMainActivity);
                         finish();
                     }
