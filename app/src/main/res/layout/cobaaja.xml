@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/kaloribackground">
+
+    <EditText
+        android:id="@+id/inputBeratHarian"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/input_field"
+        android:ems="10"
+        android:hint="Berat"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnInputBeratHarian"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/inputBeratHarian"
+        android:background="@drawable/button"
+        android:text="Input"
+        android:textColor="#FFFDFD"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/inputBeratHarian"
+        app:layout_constraintStart_toEndOf="@+id/inputBeratHarian"
+        app:layout_constraintTop_toTopOf="@+id/inputBeratHarian" />
+
+    <ProgressBar
+        android:id="@+id/progressBarInputRiwayat"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnInputBeratHarian"
+        app:layout_constraintStart_toEndOf="@+id/btnInputBeratHarian"
+        app:layout_constraintTop_toTopOf="@+id/btnInputBeratHarian" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view_tampil_berat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputBeratHarian"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputBeratHarian" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

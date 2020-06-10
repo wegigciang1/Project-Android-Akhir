@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (awesomeValidation.validate()) {
-                    final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                    final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
                     final Date date = new Date();
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -71,10 +71,10 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-                                final DocumentReference collref = mFirebaseFirestore.collection("Kalori")
+                                final DocumentReference collref = mFirebaseFirestore.collection("Users")
                                         .document(mFirebaseAuth.getCurrentUser().getUid())
-                                        .collection(sdf.format(date))
-                                        .document(mFirebaseAuth.getCurrentUser().getUid());
+                                        .collection("Kalori")
+                                        .document();
                                 cekDataRencana(collref);
 
                             } else {
@@ -163,9 +163,9 @@ public class LoginActivity extends AppCompatActivity {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
                                             Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                                            halUtama.putExtra("eaten", (String) document.get("eaten"));
-                                            halUtama.putExtra("kalori", (String) document.get("kaloriHarian"));
-                                            halUtama.putExtra("burned", (String) document.get("burned"));
+//                                            halUtama.putExtra("eaten", (String) document.get("eaten"));
+//                                            halUtama.putExtra("kalori", (String) document.get("kaloriHarian"));
+//                                            halUtama.putExtra("burned", (String) document.get("burned"));
                                             startActivity(halUtama);
                                             progressBar.setVisibility(View.INVISIBLE);
                                             finish();

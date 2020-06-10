@@ -66,7 +66,7 @@ public class DetailItemActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
+                final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
                 final Date date = new Date();
                 progressBarDetailItem.setVisibility(View.VISIBLE);
 
@@ -129,9 +129,9 @@ public class DetailItemActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent goToMainActivity = new Intent(DetailItemActivity.this, MainActivity.class);
-                        goToMainActivity.putExtra("eaten", String.valueOf(total));
-                        goToMainActivity.putExtra("kalori", String.valueOf(totalKalori));
-                        goToMainActivity.putExtra("burned", "0");
+//                        goToMainActivity.putExtra("eaten", String.valueOf(total));
+//                        goToMainActivity.putExtra("kalori", String.valueOf(totalKalori));
+//                        goToMainActivity.putExtra("burned", "0");
                         startActivity(goToMainActivity);
                         finish();
                     }

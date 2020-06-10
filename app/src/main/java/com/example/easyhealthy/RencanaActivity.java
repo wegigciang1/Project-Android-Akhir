@@ -28,9 +28,10 @@ import java.util.Objects;
 
 public class RencanaActivity extends AppCompatActivity {
 
-    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference collref = mFirebaseFirestore.collection("Berat Badan");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
+    private CollectionReference collref = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).collection("Berat Badan");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +101,7 @@ public class RencanaActivity extends AppCompatActivity {
                         Toast.makeText(RencanaActivity.this, "Isi Target Berat", Toast.LENGTH_SHORT).show();
                     } else {
                         final int target = Integer.parseInt(targetBerat.getText().toString());
-                        collref.whereEqualTo("id", mFirebaseAuth.getCurrentUser().getUid())
-                                .get()
+                        collref.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

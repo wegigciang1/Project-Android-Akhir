@@ -99,7 +99,6 @@ public class RegisActivity extends AppCompatActivity {
                                 Map<String, Object> beratUser = new HashMap<>();
                                 beratUser.put("berat", txtberat.getText().toString());
                                 beratUser.put("tanggal", sdf.format(date));
-                                beratUser.put("id", UserID);
 
                                 firebaseFirestoreDb.collection("Users").document(UserID).set(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -115,7 +114,7 @@ public class RegisActivity extends AppCompatActivity {
                                                 Log.d("TAG", e.toString());
                                             }
                                         });
-                                firebaseFirestoreDb.collection("Berat Badan").document().set(beratUser)
+                                firebaseFirestoreDb.collection("Users").document(UserID).collection("Berat Badan").document().set(beratUser)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {

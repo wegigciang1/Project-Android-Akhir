@@ -159,35 +159,55 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tampilkanInputRiwayat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:visibility="invisible">
+            android:background="@drawable/kaloribackground"
+            android:visibility="visible">
 
             <EditText
                 android:id="@+id/inputBeratHarian"
-                android:layout_width="250dp"
+                android:layout_width="200dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/input_field"
                 android:ems="10"
                 android:hint="Berat"
                 android:importantForAutofill="no"
-                android:inputType="number" />
+                android:inputType="number"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btnInputBeratHarian"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/inputBeratHarian"
                 android:background="@drawable/button"
                 android:text="Input"
                 android:textColor="#FFFDFD"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/inputBeratHarian"
+                app:layout_constraintStart_toEndOf="@+id/inputBeratHarian"
+                app:layout_constraintTop_toTopOf="@+id/inputBeratHarian" />
+
+            <ProgressBar
+                android:id="@+id/progressBarInputRiwayat"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/btnInputBeratHarian"
+                app:layout_constraintStart_toEndOf="@+id/btnInputBeratHarian"
+                app:layout_constraintTop_toTopOf="@+id/btnInputBeratHarian" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycle_view_tampil_berat"
@@ -195,30 +215,42 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/inputBeratHarian"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp" />
-        </RelativeLayout>
+                android:layout_marginTop="75dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tampilkanKalori"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:background="@drawable/kaloribackground"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <LinearLayout
                 android:id="@+id/layout1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="65dp"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
                 <TextView
                     android:id="@+id/textViewEaten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2323"
+                    android:text=""
                     android:textColor="#000"
                     android:textSize="25dp" />
 
@@ -234,18 +266,21 @@
                 android:id="@+id/layout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="100dp"
-                android:layout_marginRight="70dp"
+                android:layout_marginTop="130dp"
                 android:layout_toRightOf="@+id/layout1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                app:layout_constraintStart_toEndOf="@+id/layout1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
                 <TextView
                     android:id="@+id/textViewKalori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2323"
+                    android:text=""
                     android:textColor="#000"
                     android:textSize="25dp" />
 
@@ -258,18 +293,26 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="65dp"
+                android:layout_marginEnd="45dp"
                 android:layout_toRightOf="@+id/layout2"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
                 <TextView
                     android:id="@+id/textViewBurned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2323"
+                    android:text=""
                     android:textColor="#000"
                     android:textSize="25dp" />
 
@@ -281,63 +324,74 @@
                     android:textColor="#000" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/masukkanTanggal"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/layout2"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="50dp"
-                android:background="@drawable/input_field"
-                android:ems="10"
-                android:hint="Date"
-                android:importantForAutofill="no"
-                android:inputType="date" />
+            <TextView
+                android:id="@+id/tanggalKalori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="Date"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/layout1"
+                app:layout_constraintTop_toBottomOf="@+id/layout2"
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btnPilihTanggal"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@+id/masukkanTanggal"
-                android:layout_alignStart="@id/masukkanTanggal"
-                android:layout_marginStart="85dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button"
-                android:text="Input"
+                android:padding="3dp"
+                android:text="Pilih Tanggal"
                 android:textColor="#FFFDFD"
-                android:textSize="14sp" />
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/layout1"
+                app:layout_constraintTop_toBottomOf="@+id/tanggalKalori" />
+
 
             <ImageView
                 android:id="@+id/gambarsteps"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_below="@+id/layout1"
-                android:layout_alignStart="@id/layout1"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="270dp"
-                android:src="@drawable/iconswalk" />
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/iconswalk"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintHorizontal_bias="0.24"
+                app:layout_constraintStart_toStartOf="@+id/layout1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/txtLangkahkaki"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="380dp"
-                android:layout_toRightOf="@id/gambarsteps"
+                android:layout_marginStart="5dp"
                 android:text="Langkah Kaki"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/gambarsteps"
+                app:layout_constraintTop_toTopOf="@+id/gambarsteps"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/langkahKaki"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtLangkahkaki"
-                android:layout_alignEnd="@id/txtLangkahkaki"
-                android:layout_marginEnd="40dp"
+                android:layout_marginTop="4dp"
                 android:text="50"
-                android:textSize="34sp" />
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtLangkahkaki"
+                app:layout_constraintStart_toStartOf="@+id/txtLangkahkaki"
+                app:layout_constraintTop_toBottomOf="@+id/txtLangkahkaki" />
 
-
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 
