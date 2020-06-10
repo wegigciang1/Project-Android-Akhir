@@ -43,6 +43,7 @@ public class DetailItemActivity extends AppCompatActivity {
         //intent
         final Intent intent = getIntent();
         final String tempKalori = intent.getStringExtra("kalori");
+        final String data = intent.getStringExtra( "data" );
 
         //init
         TextView textViewdetail = findViewById(R.id.tv_detail);
@@ -63,6 +64,13 @@ public class DetailItemActivity extends AppCompatActivity {
         textViewjudul.setText(intent.getStringExtra("judul"));
         textViewdetail.setText(intent.getStringExtra("detail"));
 
+        if (data.equals( "workout" )){
+            start.setText( "MULAI WORKOUT" );
+        }
+        else {
+            start.setText( "TAMBAH MAKANAN" );
+        }
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,25 +78,32 @@ public class DetailItemActivity extends AppCompatActivity {
                 final Date date = new Date();
                 progressBarDetailItem.setVisibility(View.VISIBLE);
 
+                if (data.equals( "workout" )){
+                    Intent goToWorkout = new Intent( DetailItemActivity.this, Workout.class );
+                    goToWorkout.putExtra("kalori", tempKalori);
+                    startActivity(goToWorkout);
+                }
+                else {
 
-                final DocumentReference collref = mFirebaseFirestore.collection("Kalori").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection(sdf.format(date)).document(mFirebaseAuth.getCurrentUser().getUid());
-                collref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String kalori = String.valueOf(document.get("kaloriHarian"));
-                                String eaten = String.valueOf(document.get("eaten"));
-                                int total = 0;
-                                int totalKalori = 0;
-                                total = Integer.parseInt(tempKalori) + Integer.parseInt(eaten);
-                                totalKalori = total + Integer.parseInt(kalori);
-                                updateDataEarned(collref, total, totalKalori);
+                    final DocumentReference collref = mFirebaseFirestore.collection( "Kalori" ).document( Objects.requireNonNull( mFirebaseAuth.getCurrentUser() ).getUid() ).collection( sdf.format( date ) ).document( mFirebaseAuth.getCurrentUser().getUid() );
+                    collref.get().addOnCompleteListener( new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String kalori = String.valueOf( document.get( "kaloriHarian" ) );
+                                    String eaten = String.valueOf( document.get( "eaten" ) );
+                                    int total = 0;
+                                    int totalKalori = 0;
+                                    total = Integer.parseInt( tempKalori ) + Integer.parseInt( eaten );
+                                    totalKalori = total + Integer.parseInt( kalori );
+                                    updateDataEarned( collref, total, totalKalori );
+                                }
                             }
                         }
-                    }
-                });
+                    } );
+                }
 
             }
         });
