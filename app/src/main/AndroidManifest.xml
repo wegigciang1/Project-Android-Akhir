@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.tipsManfaat.Workout"></activity>
+        <activity android:name=".ResetBeratActivity"></activity>
+        <activity android:name=".ui.tipsManfaat.Workout" />
         <activity android:name=".ui.tipsManfaat.DetailItemActivity" />
         <activity android:name=".ui.profile.ProfileTestActivity" />
         <activity android:name=".TahapRencanaActivity" />

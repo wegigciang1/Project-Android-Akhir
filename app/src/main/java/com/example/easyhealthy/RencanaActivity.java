@@ -24,6 +24,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class RencanaActivity extends AppCompatActivity {
@@ -73,10 +78,14 @@ public class RencanaActivity extends AppCompatActivity {
                 }else{
                     DocumentReference washingtonRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
                     washingtonRef
-                            .update("Rencana", planPilihan.getText().toString())
+                            .update(
+                                    "Rencana", planPilihan.getText().toString(),
+                                    "Target", targetBerat.getText().toString()
+                            )
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    tambahKalori(); //method panggil
                                     Intent goToHome = new Intent(getApplicationContext(), TahapRencanaActivity.class);
                                     startActivity(goToHome);
                                     finish();
@@ -87,6 +96,32 @@ public class RencanaActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
+                   /* DocumentReference washington = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
+                    washington
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        String tinggi="", target="", jenisKelamin = "", usia="";
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            tinggi= (String) document.get("Tinggi Badan");
+                                            target= (String) document.get("Target");
+                                            jenisKelamin= (String) document.get("Jenis Kelamin");
+                                            usia = (String) document.get("Usia");
+                                        }
+                                        if(jenisKelamin.equals("Laki-Laki")){
+                                            Double kalori= (66.5 + (13.8 * Double.parseDouble(target)) + ((5 * Double.parseDouble(tinggi)) / (6.8 * Double.parseDouble(usia))));
+
+                                        }else{
+                                            Double kalori= (655.1 + (9.6 * Double.parseDouble(target)) + ((1.9 * Double.parseDouble(tinggi)) / (4.7 * Double.parseDouble(usia))));
+                                        }
+                                    } else {
+
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            }); */
 
                 }
             }
@@ -118,6 +153,7 @@ public class RencanaActivity extends AppCompatActivity {
                                                 } else {
                                                     autoLama.setText(total + " Minggu");
                                                     btnNext.setVisibility(View.VISIBLE);
+
                                                 }
                                             }
 
@@ -143,5 +179,27 @@ public class RencanaActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void tambahKalori() {
+        final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
+        final Date date = new Date();
+
+        final DocumentReference collref = mFirebaseFirestore.collection("Users")
+                .document(mFirebaseAuth.getCurrentUser().getUid())
+                .collection("Kalori")
+                .document();
+        Map<String, Object> dataAwal = new HashMap<>();
+        dataAwal.put("burned", "0");
+        dataAwal.put("eaten", "0");
+        dataAwal.put("kaloriHarian", "0");
+        dataAwal.put("tanggal", sdf.format(date));
+        collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //Kalo berhasil
+                Toast.makeText(RencanaActivity.this, "Kalori Berhasil", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -20,7 +20,7 @@ import com.example.easyhealthy.LoginActivity;
 import com.example.easyhealthy.PasswordChangesButtonActivity;
 import com.example.easyhealthy.ProfileButtonActivity;
 import com.example.easyhealthy.R;
-import com.example.easyhealthy.RencanaActivity;
+import com.example.easyhealthy.ResetBeratActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -173,10 +173,10 @@ public class ProfileFragment extends Fragment {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        DocumentReference washingtonRef = fStore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Berat badan").document(document.getId());
-                                        washingtonRef.delete();
-                                        Intent goToHalRencana = new Intent(getActivity(), RencanaActivity.class);
-                                        startActivity(goToHalRencana);
+                                        DocumentReference washington = fStore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Berat Badan").document(document.getId());
+                                        washington.delete();
+                                        Intent goToHalReset = new Intent(getActivity(), ResetBeratActivity.class);
+                                        startActivity(goToHalReset);
                                         getActivity().finish();
                                     }
                                 }
