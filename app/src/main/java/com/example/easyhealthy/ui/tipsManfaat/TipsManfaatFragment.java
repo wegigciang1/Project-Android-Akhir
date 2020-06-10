@@ -55,7 +55,7 @@ public class TipsManfaatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("data", "Workout");
+                bundle.putString("data", "workout");
                 Navigation.findNavController(root).navigate(R.id.action_navigation_home_to_seeAllFragment, bundle);
             }
         });

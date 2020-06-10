@@ -70,4 +70,8 @@ dependencies {
     //youtube
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.23'
 
+    //progress bar
+    implementation 'com.github.rehmanmuradali:ticker:1.0.1'
+
+
 }
