@@ -13,17 +13,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        app:m_circle_radius="70"
+        app:m_circle_radius="80"
         app:m_cicle_stroke_width="25"
         app:m_arc_stroke_color="@android:color/white"
         app:m_circle_stroke_color="@color/colorPrimary"
         />
+
+    <Button
+        android:id="@+id/startWorkout"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="START"
+
+        android:textSize="25sp"/>
     
     <Button
         android:id="@+id/pauseWorkout"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="10dp"
         android:text="PAUSE"
 
         android:textSize="25sp"/>
