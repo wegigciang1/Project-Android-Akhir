@@ -25,9 +25,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                                         .document(mFirebaseAuth.getCurrentUser().getUid())
                                         .collection("Kalori")
                                         .document();
-                                cekDataRencana(collref);
+                                cekDataRencana(collref, sdf.format(date));
 
                             } else {
                                 try {
@@ -141,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void cekDataRencana(final DocumentReference collref) {
+    private void cekDataRencana(final DocumentReference collref, final String tanggal) {
         DocumentReference docRef = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -156,24 +159,24 @@ public class LoginActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.INVISIBLE);
                             finish();
                         } else {
-                            collref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            final CollectionReference collref2 = mFirebaseFirestore.collection("Users")
+                                    .document(mFirebaseAuth.getCurrentUser().getUid())
+                                    .collection("Kalori");
+
+                            collref2.whereEqualTo("tanggal", tanggal).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-//                                            halUtama.putExtra("eaten", (String) document.get("eaten"));
-//                                            halUtama.putExtra("kalori", (String) document.get("kaloriHarian"));
-//                                            halUtama.putExtra("burned", (String) document.get("burned"));
-                                            startActivity(halUtama);
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                            finish();
-                                        } else {
+                                        int i = 0;
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            i++;
+                                        }
+                                        if (i == 0) {
                                             Map<String, Object> dataAwal = new HashMap<>();
                                             dataAwal.put("burned", "0");
                                             dataAwal.put("eaten", "0");
                                             dataAwal.put("kaloriHarian", "0");
+                                            dataAwal.put("tanggal", tanggal);
                                             collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
@@ -186,6 +189,11 @@ public class LoginActivity extends AppCompatActivity {
                                                     finish();
                                                 }
                                             });
+                                        } else {
+                                            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(halUtama);
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            finish();
                                         }
                                     }
                                 }

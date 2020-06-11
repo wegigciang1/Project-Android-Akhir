@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/kaloribackground"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <EditText
                 android:id="@+id/inputBeratHarian"
@@ -229,7 +229,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/kaloribackground"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/layout1"
@@ -250,7 +250,7 @@
                     android:id="@+id/textViewEaten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="0"
                     android:textColor="#000"
                     android:textSize="25dp" />
 
@@ -312,7 +312,7 @@
                     android:id="@+id/textViewBurned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="0"
                     android:textColor="#000"
                     android:textSize="25dp" />
 

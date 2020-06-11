@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -86,9 +87,6 @@ public class RencanaActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     tambahKalori(); //method panggil
-                                    Intent goToHome = new Intent(getApplicationContext(), TahapRencanaActivity.class);
-                                    startActivity(goToHome);
-                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -96,33 +94,6 @@ public class RencanaActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
-                   /* DocumentReference washington = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
-                    washington
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        String tinggi="", target="", jenisKelamin = "", usia="";
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            tinggi= (String) document.get("Tinggi Badan");
-                                            target= (String) document.get("Target");
-                                            jenisKelamin= (String) document.get("Jenis Kelamin");
-                                            usia = (String) document.get("Usia");
-                                        }
-                                        if(jenisKelamin.equals("Laki-Laki")){
-                                            Double kalori= (66.5 + (13.8 * Double.parseDouble(target)) + ((5 * Double.parseDouble(tinggi)) / (6.8 * Double.parseDouble(usia))));
-
-                                        }else{
-                                            Double kalori= (655.1 + (9.6 * Double.parseDouble(target)) + ((1.9 * Double.parseDouble(tinggi)) / (4.7 * Double.parseDouble(usia))));
-                                        }
-                                    } else {
-
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            }); */
-
                 }
             }
         });
@@ -182,23 +153,70 @@ public class RencanaActivity extends AppCompatActivity {
     }
 
     private void tambahKalori() {
-        final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
-        final Date date = new Date();
-
-        final DocumentReference collref = mFirebaseFirestore.collection("Users")
-                .document(mFirebaseAuth.getCurrentUser().getUid())
-                .collection("Kalori")
-                .document();
-        Map<String, Object> dataAwal = new HashMap<>();
-        dataAwal.put("burned", "0");
-        dataAwal.put("eaten", "0");
-        dataAwal.put("kaloriHarian", "0");
-        dataAwal.put("tanggal", sdf.format(date));
-        collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+        final DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                //Kalo berhasil
-                Toast.makeText(RencanaActivity.this, "Kalori Berhasil", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String tinggi = (String) document.get("Tinggi Badan");
+                        String target = (String) document.get("Target");
+                        String jenisKelamin = (String) document.get("Jenis Kelamin");
+                        String usia = (String) document.get("Usia");
+
+                        final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
+                        final Date date = new Date();
+
+                        Map<String, Object> dataAwal = new HashMap<>();
+                        dataAwal.put("burned", "0");
+                        dataAwal.put("eaten", "0");
+                        dataAwal.put("tanggal", sdf.format(date));
+
+                        double kalori = 0;
+
+                        if (jenisKelamin.equals("Laki-Laki")) {
+                            kalori = 66.5 + (13.8 * Double.parseDouble(target)) + 5 * Double.parseDouble(tinggi) / 6.8 * Double.parseDouble(usia);
+                        } else {
+                            kalori = 655.1 + (9.6 * Double.parseDouble(target)) + 1.9 * Double.parseDouble(tinggi) / 4.7 * Double.parseDouble(usia);
+                        }
+                        dataAwal.put("kaloriHarian", String.format("%.2f", kalori));
+                        final DocumentReference collref = mFirebaseFirestore.collection("Users")
+                                .document(mFirebaseAuth.getCurrentUser().getUid())
+                                .collection("Kalori")
+                                .document();
+                        collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //Kalo berhasil
+                                Toast.makeText(RencanaActivity.this, "Kalori Berhasil", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+
+                        final double finalKalori = kalori;
+                        docRef
+                                .update("kaloriHarian", String.format("%.2f", kalori))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Intent goToHome = new Intent(getApplicationContext(), TahapRencanaActivity.class);
+                                        goToHome.putExtra("kalori", String.format("%.2f", finalKalori));
+                                        startActivity(goToHome);
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
+
+                    }
+                }
             }
         });
     }

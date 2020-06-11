@@ -2,6 +2,7 @@ package com.example.easyhealthy.ui.dashboard;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -128,14 +131,13 @@ public class DashboardFragment extends Fragment {
 
         final ProgressBar progressBar = view.findViewById(R.id.progressBarInputRiwayat);
 
-
-        SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
-        Date date = new Date();
+        final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
+        final Date date = new Date();
 
         tanggalKalori.setText(sdf.format(date));
 
-        CollectionReference ambilKalori = mFirebaseFirestore.collection("Kalori").document(firebaseAuth.getCurrentUser().getUid()).collection(tanggalKalori.getText().toString());
-        ambilKalori.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        CollectionReference ambilKalori = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Kalori");
+        ambilKalori.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -147,6 +149,8 @@ public class DashboardFragment extends Fragment {
                 }
             }
         });
+
+        final Intent intent = getActivity().getIntent();
 
 
         btnPilihTanggal.setOnClickListener(new View.OnClickListener() {
@@ -162,15 +166,34 @@ public class DashboardFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         tanggalKalori.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
-                        CollectionReference ambilKalori = mFirebaseFirestore.collection("Kalori").document(firebaseAuth.getCurrentUser().getUid()).collection(dayOfMonth + "-" + (month + 1) + "-" + year);
-                        ambilKalori.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        CollectionReference ambilKalori = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Kalori");
+                        ambilKalori.whereEqualTo("tanggal", dayOfMonth + "-" + (month + 1) + "-" + year).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        eaten.setText((String) document.get("eaten"));
-                                        kalori.setText((String) document.get("kaloriHarian"));
-                                        burned.setText((String) document.get("burned"));
+                                    if (task.getResult().isEmpty()) {
+                                        DocumentReference docRef = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
+                                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        kalori.setText((String) document.get("kaloriHarian"));
+                                                        burned.setText("0");
+                                                        eaten.setText("0");
+                                                        Toast.makeText(getActivity(), (String) document.get("kaloriHarian"), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            eaten.setText((String) document.get("eaten"));
+                                            kalori.setText((String) document.get("kaloriHarian"));
+                                            burned.setText((String) document.get("burned"));
+                                        }
                                     }
                                 }
                             }

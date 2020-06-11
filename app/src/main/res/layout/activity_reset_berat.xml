@@ -44,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/btnResetBerat"
         app:layout_constraintStart_toEndOf="@+id/btnResetBerat"
         app:layout_constraintTop_toTopOf="@+id/btnResetBerat" />

@@ -16,9 +16,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,7 +59,7 @@ public class Workout extends AppCompatActivity {
         CircularView.OptionsBuilder builderWithTimer =
                 new CircularView.OptionsBuilder()
                         .shouldDisplayText(true)
-                        .setCounterInSeconds(30)
+                        .setCounterInSeconds(3)
                         .setCircularViewCallback(new CircularViewCallback() {
                             @Override
                             public void onTimerFinish() {
@@ -105,19 +107,19 @@ public class Workout extends AppCompatActivity {
                 final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
                 final Date date = new Date();
 
-                final DocumentReference collref = mFirebaseFirestore.collection("Kalori").document( Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection(sdf.format(date)).document(mFirebaseAuth.getCurrentUser().getUid());
-                collref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                final CollectionReference collref2 = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection("Kalori");
+                collref2.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 String kalori = String.valueOf(document.get("kaloriHarian"));
                                 String burned = String.valueOf(document.get("burned"));
-                                int total = 0;
-                                int totalKalori = 0;
-                                total = Integer.parseInt(tempKalori) - Integer.parseInt(burned);
-                                totalKalori = total + Integer.parseInt(kalori);
+                                double total = 0;
+                                double totalKalori = 0;
+                                total = Double.parseDouble(tempKalori) + Double.parseDouble(burned);
+                                totalKalori = Double.parseDouble(kalori) + Double.parseDouble(tempKalori);
+                                final DocumentReference collref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection("Kalori").document(document.getId());
                                 updateDataBurned(collref, total, totalKalori);
                             }
                         }
@@ -127,19 +129,17 @@ public class Workout extends AppCompatActivity {
             }
         } );
     }
-    private void updateDataBurned(DocumentReference collref, final int total, final int totalKalori) {
+
+    private void updateDataBurned(DocumentReference collref, final double total, final double totalKalori) {
         collref
                 .update(
-                        "burned", String.valueOf(total),
-                        "kaloriHarian", String.valueOf(totalKalori)
+                        "burned", String.format("%.0f", total),
+                        "kaloriHarian", String.format("%.2f", totalKalori)
                 )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent goToMainActivity = new Intent(Workout.this, MainActivity.class);
-//                        goToMainActivity.putExtra("burned", String.valueOf(total));
-//                        goToMainActivity.putExtra("kalori", String.valueOf(totalKalori));
-//                        goToMainActivity.putExtra("burned", "0");
                         startActivity(goToMainActivity);
                         finish();
                     }
