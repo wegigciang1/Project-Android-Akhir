@@ -277,6 +277,14 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <TextView
+                    android:id="@+id/textViewOverKalori"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Over"
+                    android:textColor="#FF2400"
+                    android:visibility="invisible" />
+
+                <TextView
                     android:id="@+id/textViewKalori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -284,12 +292,14 @@
                     android:textColor="#000"
                     android:textSize="25dp" />
 
+
                 <TextView
                     android:id="@+id/textViewKeteranganKalori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kalori"
+                    android:text="Kalori"
                     android:textColor="#000" />
+
             </LinearLayout>
 
             <LinearLayout

@@ -17,7 +17,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -120,12 +119,14 @@ public class DashboardFragment extends Fragment {
         final TextView langkahKaki = view.findViewById(R.id.langkahKaki);
         final TextView eaten = view.findViewById(R.id.textViewEaten);
         final TextView kalori = view.findViewById(R.id.textViewKalori);
+        final TextView overKaloriTextView = view.findViewById(R.id.textViewOverKalori);
         final TextView burned = view.findViewById(R.id.textViewBurned);
         final TextView tanggalKalori = view.findViewById(R.id.tanggalKalori);
         final ConstraintLayout tampilkanInputRiwayat = view.findViewById(R.id.tampilkanInputRiwayat);
         final ConstraintLayout tampilkanKalori = view.findViewById(R.id.tampilkanKalori);
         final LineChart tampilBerat = view.findViewById(R.id.tampilGrafikBerat);
         final EditText inputBeratHarian = view.findViewById(R.id.inputBeratHarian);
+
         Button btnInputBeratHarian = view.findViewById(R.id.btnInputBeratHarian);
         Button btnPilihTanggal = view.findViewById(R.id.btnPilihTanggal);
 
@@ -142,8 +143,16 @@ public class DashboardFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        String kaloriTamp = (String) document.get("kaloriHarian");
                         eaten.setText((String) document.get("eaten"));
-                        kalori.setText((String) document.get("kaloriHarian"));
+                        double kaloriConvert = Double.parseDouble(kaloriTamp);
+                        if (kaloriConvert < 0) {
+                            kalori.setText(String.valueOf(Math.abs(kaloriConvert)));
+                            overKaloriTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            kalori.setText(kaloriTamp);
+                            overKaloriTextView.setVisibility(View.INVISIBLE);
+                        }
                         burned.setText((String) document.get("burned"));
                     }
                 }
@@ -182,7 +191,7 @@ public class DashboardFragment extends Fragment {
                                                         kalori.setText((String) document.get("kaloriHarian"));
                                                         burned.setText("0");
                                                         eaten.setText("0");
-                                                        Toast.makeText(getActivity(), (String) document.get("kaloriHarian"), Toast.LENGTH_SHORT).show();
+                                                        overKaloriTextView.setVisibility(View.INVISIBLE);
                                                     }
                                                 }
                                             }
@@ -190,8 +199,16 @@ public class DashboardFragment extends Fragment {
 
                                     } else {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
+                                            String kaloriTamp = (String) document.get("kaloriHarian");
                                             eaten.setText((String) document.get("eaten"));
-                                            kalori.setText((String) document.get("kaloriHarian"));
+                                            double kaloriConvert = Double.parseDouble(kaloriTamp);
+                                            if (kaloriConvert < 0) {
+                                                kalori.setText(String.valueOf(Math.abs(kaloriConvert)));
+                                                overKaloriTextView.setVisibility(View.VISIBLE);
+                                            } else {
+                                                kalori.setText(kaloriTamp);
+                                                overKaloriTextView.setVisibility(View.INVISIBLE);
+                                            }
                                             burned.setText((String) document.get("burned"));
                                         }
                                     }

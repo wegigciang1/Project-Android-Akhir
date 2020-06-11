@@ -59,7 +59,7 @@ public class Workout extends AppCompatActivity {
         CircularView.OptionsBuilder builderWithTimer =
                 new CircularView.OptionsBuilder()
                         .shouldDisplayText(true)
-                        .setCounterInSeconds(3)
+                        .setCounterInSeconds(30)
                         .setCircularViewCallback(new CircularViewCallback() {
                             @Override
                             public void onTimerFinish() {
