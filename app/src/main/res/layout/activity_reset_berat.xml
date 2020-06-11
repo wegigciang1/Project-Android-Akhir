@@ -19,7 +19,7 @@
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.053"
+        app:layout_constraintHorizontal_bias="0.271"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.328" />
@@ -43,23 +43,24 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/btnResetBerat"
-        app:layout_constraintStart_toEndOf="@+id/btnResetBerat"
-        app:layout_constraintTop_toTopOf="@+id/btnResetBerat" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextResetBerat"
+        app:layout_constraintVertical_bias="0.103" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Masukkan Berat Badan Baru"
-        android:textSize="20sp"
+        android:text="Input Berat Badan Baru"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextResetBerat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.235"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.708" />
+        app:layout_constraintVertical_bias="0.435" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

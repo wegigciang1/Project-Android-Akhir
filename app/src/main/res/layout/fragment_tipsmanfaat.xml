@@ -154,7 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/breakfast" />
+                        android:src="@drawable/workout" />
 
                     <TextView
                         android:layout_width="match_parent"
