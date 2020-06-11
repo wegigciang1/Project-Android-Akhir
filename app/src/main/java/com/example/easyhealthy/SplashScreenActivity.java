@@ -13,18 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -59,12 +58,10 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
 
                 if (mFirebaseAuth.getCurrentUser() != null) {
-                    final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
-                    final Date date = new Date();
-                    final DocumentReference collref = mFirebaseFirestore.collection("Kalori")
+
+                    final CollectionReference collref = mFirebaseFirestore.collection("Users")
                             .document(mFirebaseAuth.getCurrentUser().getUid())
-                            .collection(sdf.format(date))
-                            .document(mFirebaseAuth.getCurrentUser().getUid());
+                            .collection("Kalori");
                     cekDataRencana(collref);
 
                 } else {
@@ -76,7 +73,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, SPLASH_SCREEN_TIME);
     }
 
-    private void cekDataRencana(final DocumentReference collref) {
+    private void cekDataRencana(final CollectionReference collref) {
         DocumentReference docRef = mFirebaseFirestore.collection("Users").document( Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -88,43 +85,29 @@ public class SplashScreenActivity extends AppCompatActivity {
                         if (rencana.isEmpty()) {
                             Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
                             startActivity(halAwal);
-
                             finish();
                         } else {
-                            collref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                                            halUtama.putExtra("eaten", (String) document.get("eaten"));
-                                            halUtama.putExtra("kalori", (String) document.get("kaloriHarian"));
-                                            halUtama.putExtra("burned", (String) document.get("burned"));
-                                            startActivity(halUtama);
-
-                                            finish();
-                                        } else {
-                                            Map<String, Object> dataAwal = new HashMap<>();
-                                            dataAwal.put("burned", "0");
-                                            dataAwal.put("eaten", "0");
-                                            dataAwal.put("kaloriHarian", "0");
-                                            collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                                                    halUtama.putExtra("eaten", "0");
-                                                    halUtama.putExtra("kalori", "0");
-                                                    halUtama.putExtra("burned", "0");
-                                                    startActivity(halUtama);
-
+                            final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
+                            final Date date = new Date();
+                            collref.whereEqualTo("tanggal", sdf.format(date))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                if (task.getResult().isEmpty()) {
+                                                    Intent halAwal = new Intent(getApplicationContext(), LoginActivity.class);
+                                                    startActivity(halAwal);
+                                                    finish();
+                                                } else {
+                                                    Intent halAwal = new Intent(getApplicationContext(), MainActivity.class);
+                                                    startActivity(halAwal);
                                                     finish();
                                                 }
-                                            });
+
+                                            }
                                         }
-                                    }
-                                }
-                            });
+                                    });
 
                         }
                     }
