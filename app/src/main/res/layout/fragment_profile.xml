@@ -35,6 +35,7 @@
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
         android:columnCount="2"
         android:rowCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +43,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.846">
+        app:layout_constraintVertical_bias="1.0">
         <!--Bagian Ganti Foto Profile-->
         <androidx.cardview.widget.CardView
             android:id="@+id/btnChangePhotoProfile"

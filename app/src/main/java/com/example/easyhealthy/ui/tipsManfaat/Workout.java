@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class Workout extends AppCompatActivity {
     Button pause;
     Button finish,resume,start;
     CircularView circularViewWithTimer;
+    ProgressBar progressBarKirimWorkout;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -50,9 +52,11 @@ public class Workout extends AppCompatActivity {
         pause =findViewById( R.id.pauseWorkout );
         finish=findViewById( R.id.finishWorkout );
         resume=findViewById( R.id.resumeWorkout );
+        progressBarKirimWorkout.findViewById(R.id.progressBarKirimWorkout);
         finish.setVisibility( View.INVISIBLE );
         pause.setVisibility( View.INVISIBLE );
         resume.setVisibility( View.INVISIBLE );
+
 
         circularViewWithTimer = findViewById(R.id.progressBarWorkout);
 
@@ -107,6 +111,8 @@ public class Workout extends AppCompatActivity {
                 final SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy", Locale.getDefault());
                 final Date date = new Date();
 
+                progressBarKirimWorkout.setVisibility(View.VISIBLE);
+
                 final CollectionReference collref2 = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection("Kalori");
                 collref2.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -121,6 +127,7 @@ public class Workout extends AppCompatActivity {
                                 totalKalori = Double.parseDouble(kalori) + Double.parseDouble(tempKalori);
                                 final DocumentReference collref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection("Kalori").document(document.getId());
                                 updateDataBurned(collref, total, totalKalori);
+                                progressBarKirimWorkout.setVisibility(View.INVISIBLE);
                             }
                         }
                     }

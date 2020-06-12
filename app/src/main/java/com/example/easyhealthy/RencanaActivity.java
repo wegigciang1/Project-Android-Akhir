@@ -176,9 +176,11 @@ public class RencanaActivity extends AppCompatActivity {
                         double kalori = 0;
 
                         if (jenisKelamin.equals("Laki-Laki")) {
-                            kalori = 66.5 + (13.8 * Double.parseDouble(target)) + 5 * Double.parseDouble(tinggi) / 6.8 * Double.parseDouble(usia);
+
+                            kalori = (10 * Double.parseDouble(target)) + (6.25 * Double.parseDouble(tinggi)) - (5 * Double.parseDouble(usia)) + 5;
                         } else {
-                            kalori = 655.1 + (9.6 * Double.parseDouble(target)) + 1.9 * Double.parseDouble(tinggi) / 4.7 * Double.parseDouble(usia);
+
+                            kalori = (10 * Double.parseDouble(target)) + (6.25 * Double.parseDouble(tinggi)) - (5 * Double.parseDouble(usia)) - 161;
                         }
                         dataAwal.put("kaloriHarian", String.format("%.2f", kalori));
                         final DocumentReference collref = mFirebaseFirestore.collection("Users")

@@ -167,34 +167,41 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        int i = 0;
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            i++;
-                                        }
-                                        if (i == 0) {
-                                            Map<String, Object> dataAwal = new HashMap<>();
-                                            dataAwal.put("burned", "0");
-                                            dataAwal.put("eaten", "0");
-                                            dataAwal.put("kaloriHarian", "0");
-                                            dataAwal.put("tanggal", tanggal);
-                                            collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        if(task.getResult().isEmpty()){
+                                            DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
+                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
-                                                    halUtama.putExtra("eaten", "0");
-                                                    halUtama.putExtra("kalori", "0");
-                                                    halUtama.putExtra("burned", "0");
-                                                    startActivity(halUtama);
-                                                    progressBar.setVisibility(View.INVISIBLE);
-                                                    finish();
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
+                                                            Map<String, Object> dataAwal = new HashMap<>();
+                                                            dataAwal.put("burned", "0");
+                                                            dataAwal.put("eaten", "0");
+                                                            dataAwal.put("kaloriHarian", document.get("kaloriHarian"));
+                                                            dataAwal.put("tanggal", tanggal);
+                                                            collref.set(dataAwal).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
+                                                                    startActivity(halUtama);
+                                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                                    finish();
+                                                                }
+                                                            });
+                                                        }
+                                                    }
                                                 }
                                             });
-                                        } else {
+
+
+                                        }else{
                                             Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(halUtama);
                                             progressBar.setVisibility(View.INVISIBLE);
                                             finish();
                                         }
+
                                     }
                                 }
                             });

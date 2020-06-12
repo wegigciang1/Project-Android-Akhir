@@ -103,8 +103,6 @@ public class DashboardFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapterGroup);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
-        Date date = new Date();
 
         return root;
     }
@@ -297,7 +295,7 @@ public class DashboardFragment extends Fragment {
         final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
         final Date date = new Date();
 
-        collref
+        collref.whereEqualTo("tanggal",sdf.format(date))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

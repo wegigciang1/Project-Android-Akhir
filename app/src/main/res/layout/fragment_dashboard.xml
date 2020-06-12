@@ -145,13 +145,14 @@
 
     <FrameLayout
         android:layout_width="398dp"
-        android:layout_height="490dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="58dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/tampilGrafikBerat"
