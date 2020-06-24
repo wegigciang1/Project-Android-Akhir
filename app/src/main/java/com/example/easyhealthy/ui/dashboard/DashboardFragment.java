@@ -1,8 +1,8 @@
 package com.example.easyhealthy.ui.dashboard;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -59,52 +59,21 @@ public class DashboardFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
-    DatePickerDialog dpd;
-    int year, month, day;
+    private CollectionReference collref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).collection("Berat Badan");
+    private DatePickerDialog dpd;
+    private Calendar c;
+    private int year, month, day;
 
 
-    private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapterGroup;
 
     private double MagnitudePrevious = 0;
     private Integer stepcount = 0;
-    private CollectionReference collref = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Berat Badan");
-    private TextView tanggalKalori;
-    private Calendar c;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-
-        recyclerView = root.findViewById(R.id.recycle_view_tampil_berat);
-
-
-        Query query = collref.orderBy("tanggal", Query.Direction.ASCENDING);
-
-        FirestoreRecyclerOptions<DataBerat> options = new FirestoreRecyclerOptions.Builder<DataBerat>()
-                .setQuery(query, DataBerat.class)
-                .build();
-
-        adapterGroup = new FirestoreRecyclerAdapter<DataBerat, DataBeratViewHolder>(options) {
-
-            @NonNull
-            @Override
-            public DataBeratViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.berat_item, parent, false);
-                return new DataBeratViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull DataBeratViewHolder holder, int position, @NonNull DataBerat model) {
-                holder.berat.setText(model.getBerat());
-                holder.tanggal.setText(model.getTanggal());
-            }
-        };
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapterGroup);
-
-        return root;
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
@@ -135,14 +104,15 @@ public class DashboardFragment extends Fragment {
 
         tanggalKalori.setText(sdf.format(date));
 
-        CollectionReference ambilKalori = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Kalori");
+        CollectionReference ambilKalori = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).collection("Kalori");
         ambilKalori.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                         String kaloriTamp = (String) document.get("kaloriHarian");
                         eaten.setText((String) document.get("eaten"));
+                        assert kaloriTamp != null;
                         double kaloriConvert = Double.parseDouble(kaloriTamp);
                         if (kaloriConvert < 0) {
                             kalori.setText(String.valueOf(Math.abs(kaloriConvert)));
@@ -157,9 +127,6 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        final Intent intent = getActivity().getIntent();
-
-
         btnPilihTanggal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +136,8 @@ public class DashboardFragment extends Fragment {
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
 
-                dpd = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                dpd = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         tanggalKalori.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
@@ -178,13 +146,14 @@ public class DashboardFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    if (task.getResult().isEmpty()) {
+                                    if (Objects.requireNonNull(task.getResult()).isEmpty()) {
                                         DocumentReference docRef = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
                                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
+                                                    assert document != null;
                                                     if (document.exists()) {
                                                         kalori.setText((String) document.get("kaloriHarian"));
                                                         burned.setText("0");
@@ -199,6 +168,7 @@ public class DashboardFragment extends Fragment {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             String kaloriTamp = (String) document.get("kaloriHarian");
                                             eaten.setText((String) document.get("eaten"));
+                                            assert kaloriTamp != null;
                                             double kaloriConvert = Double.parseDouble(kaloriTamp);
                                             if (kaloriConvert < 0) {
                                                 kalori.setText(String.valueOf(Math.abs(kaloriConvert)));
@@ -220,6 +190,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        tampikanData(view);
 
         isiGrafik(collref, tampilBerat);
 
@@ -260,11 +231,14 @@ public class DashboardFragment extends Fragment {
         });
 
         //steps init
-        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         //listener sensor
         SensorEventListener stepDetector = new SensorEventListener() {
+
+
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSensorChanged(SensorEvent event) {
                 if (event != null) {
@@ -287,25 +261,56 @@ public class DashboardFragment extends Fragment {
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
+
         };
         sensorManager.registerListener(stepDetector, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private void tampikanData(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_view_tampil_berat);
+
+
+        Query query = collref.orderBy("tanggal", Query.Direction.ASCENDING);
+
+        FirestoreRecyclerOptions<DataBerat> options = new FirestoreRecyclerOptions.Builder<DataBerat>()
+                .setQuery(query, DataBerat.class)
+                .build();
+
+        adapterGroup = new FirestoreRecyclerAdapter<DataBerat, DataBeratViewHolder>(options) {
+
+            @NonNull
+            @Override
+            public DataBeratViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.berat_item, parent, false);
+                return new DataBeratViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull DataBeratViewHolder holder, int position, @NonNull DataBerat model) {
+                holder.berat.setText(model.getBerat());
+                holder.tanggal.setText(model.getTanggal());
+            }
+        };
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapterGroup);
     }
 
     private void tambahBerat(final EditText inputHarian, final CollectionReference collref, final LineChart tampilBerat, final ProgressBar progressBar) {
         final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault());
         final Date date = new Date();
 
-        collref.whereEqualTo("tanggal",sdf.format(date))
+        collref.whereEqualTo("tanggal", sdf.format(date))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            if (task.getResult().isEmpty()) {
+                            if (Objects.requireNonNull(task.getResult()).isEmpty()) {
                                 Map<String, String> beratHarian = new HashMap<>();
                                 beratHarian.put("berat", inputHarian.getText().toString());
                                 beratHarian.put("tanggal", sdf.format(date));
-                                DocumentReference docref = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Berat Badan").document();
+                                DocumentReference docref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).collection("Berat Badan").document();
                                 docref.set(beratHarian).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -320,8 +325,8 @@ public class DashboardFragment extends Fragment {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        DocumentReference docref = mFirebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).collection("Berat Badan").document(document.getId());
+                                                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                                        DocumentReference docref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).collection("Berat Badan").document(document.getId());
                                                         docref
                                                                 .update("berat", inputHarian.getText().toString())
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -376,7 +381,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.putInt("stepcount", stepcount);
@@ -387,7 +392,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.putInt("stepcount", stepcount);
@@ -397,7 +402,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE);
         stepcount = sharedPreferences.getInt("stepcount", 0);
     }
 

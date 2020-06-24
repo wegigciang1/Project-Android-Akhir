@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionName=""
     tools:context=".ui.tipsManfaat.SeeAllFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_see_all"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

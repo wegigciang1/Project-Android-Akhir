@@ -34,7 +34,7 @@ import ticker.views.com.ticker.widgets.circular.timer.view.CircularView;
 public class Workout extends AppCompatActivity {
 
     Button pause;
-    Button finish,resume,start;
+    Button finish, resume, start;
     CircularView circularViewWithTimer;
     ProgressBar progressBarKirimWorkout;
     private FirebaseFirestore mFirebaseFirestore = FirebaseFirestore.getInstance();
@@ -42,20 +42,20 @@ public class Workout extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_workout );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_workout);
 
         //intent
         final Intent intent = getIntent();
         final String tempKalori = intent.getStringExtra("kalori");
-        start =findViewById( R.id.startWorkout );
-        pause =findViewById( R.id.pauseWorkout );
-        finish=findViewById( R.id.finishWorkout );
-        resume=findViewById( R.id.resumeWorkout );
-        progressBarKirimWorkout.findViewById(R.id.progressBarKirimWorkout);
-        finish.setVisibility( View.INVISIBLE );
-        pause.setVisibility( View.INVISIBLE );
-        resume.setVisibility( View.INVISIBLE );
+        start = findViewById(R.id.startWorkout);
+        pause = findViewById(R.id.pauseWorkout);
+        finish = findViewById(R.id.finishWorkout);
+        resume = findViewById(R.id.resumeWorkout);
+        progressBarKirimWorkout = findViewById(R.id.progressBarKirimWorkout);
+        finish.setVisibility(View.INVISIBLE);
+        pause.setVisibility(View.INVISIBLE);
+        resume.setVisibility(View.INVISIBLE);
 
 
         circularViewWithTimer = findViewById(R.id.progressBarWorkout);
@@ -70,7 +70,7 @@ public class Workout extends AppCompatActivity {
 
                                 // Will be called if times up of countdown timer
                                 Toast.makeText(Workout.this, "KERJA KERAS MU TAKKAN SIA SIA", Toast.LENGTH_SHORT).show();
-                                finish.setVisibility( View.VISIBLE );
+                                finish.setVisibility(View.VISIBLE);
                             }
 
                             @Override
@@ -83,28 +83,28 @@ public class Workout extends AppCompatActivity {
 
         circularViewWithTimer.setOptions(builderWithTimer);
 
-        start.setOnClickListener( new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 circularViewWithTimer.startTimer();
-                pause.setVisibility( View.VISIBLE );
+                pause.setVisibility(View.VISIBLE);
             }
-        } );
-        pause.setOnClickListener( new View.OnClickListener() {
+        });
+        pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 circularViewWithTimer.pauseTimer();
-                resume.setVisibility( View.VISIBLE );
+                resume.setVisibility(View.VISIBLE);
             }
-        } );
-        resume.setOnClickListener( new View.OnClickListener() {
+        });
+        resume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 circularViewWithTimer.resumeTimer();
             }
-        } );
+        });
 
-        finish.setOnClickListener( new View.OnClickListener() {
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //intent update
@@ -117,24 +117,24 @@ public class Workout extends AppCompatActivity {
                 collref2.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (task.isSuccessful())
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 String kalori = String.valueOf(document.get("kaloriHarian"));
                                 String burned = String.valueOf(document.get("burned"));
-                                double total = 0;
-                                double totalKalori = 0;
+                                double total;
+                                double totalKalori;
+                                assert tempKalori != null;
                                 total = Double.parseDouble(tempKalori) + Double.parseDouble(burned);
                                 totalKalori = Double.parseDouble(kalori) + Double.parseDouble(tempKalori);
                                 final DocumentReference collref = mFirebaseFirestore.collection("Users").document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid()).collection("Kalori").document(document.getId());
                                 updateDataBurned(collref, total, totalKalori);
                                 progressBarKirimWorkout.setVisibility(View.INVISIBLE);
                             }
-                        }
                     }
                 });
 
             }
-        } );
+        });
     }
 
     private void updateDataBurned(DocumentReference collref, final double total, final double totalKalori) {

@@ -1,5 +1,6 @@
 package com.example.easyhealthy;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +30,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 final DocumentReference collref = mFirebaseFirestore.collection("Users")
-                                        .document(mFirebaseAuth.getCurrentUser().getUid())
+                                        .document(Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid())
                                         .collection("Kalori")
                                         .document();
                                 cekDataRencana(collref, sdf.format(date));
@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                final View dialogForgetPass = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+                @SuppressLint("InflateParams") final View dialogForgetPass = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
                 final EditText emailForgetPass = dialogForgetPass.findViewById(R.id.editTextEmailForgetPass);
 
                 builder.setView(dialogForgetPass);
@@ -151,8 +151,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    assert document != null;
                     if (document.exists()) {
                         String rencana = (String) document.get("Rencana");
+                        assert rencana != null;
                         if (rencana.isEmpty()) {
                             Intent halAwal = new Intent(getApplicationContext(), RencanaActivity.class);
                             startActivity(halAwal);
@@ -167,13 +169,14 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        if(task.getResult().isEmpty()){
+                                        if (Objects.requireNonNull(task.getResult()).isEmpty()) {
                                             DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
                                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     if (task.isSuccessful()) {
                                                         DocumentSnapshot document = task.getResult();
+                                                        assert document != null;
                                                         if (document.exists()) {
                                                             Map<String, Object> dataAwal = new HashMap<>();
                                                             dataAwal.put("burned", "0");
@@ -195,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                                             });
 
 
-                                        }else{
+                                        } else {
                                             Intent halUtama = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(halUtama);
                                             progressBar.setVisibility(View.INVISIBLE);
