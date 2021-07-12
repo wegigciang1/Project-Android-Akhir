@@ -155,6 +155,7 @@ public class RencanaActivity extends AppCompatActivity {
     private void tambahKalori() {
         final DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -173,7 +174,7 @@ public class RencanaActivity extends AppCompatActivity {
                         dataAwal.put("eaten", "0");
                         dataAwal.put("tanggal", sdf.format(date));
 
-                        double kalori = 0;
+                        final double kalori;
 
                         if (jenisKelamin.equals("Laki-Laki")) {
 
@@ -182,7 +183,8 @@ public class RencanaActivity extends AppCompatActivity {
 
                             kalori = (10 * Double.parseDouble(target)) + (6.25 * Double.parseDouble(tinggi)) - (5 * Double.parseDouble(usia)) - 161;
                         }
-                        dataAwal.put("kaloriHarian", String.format("%.2f", kalori));
+                        final String hasilFormat = String.format(Locale.US,"%.2f", kalori);
+                        dataAwal.put("kaloriHarian", hasilFormat);
                         final DocumentReference collref = mFirebaseFirestore.collection("Users")
                                 .document(mFirebaseAuth.getCurrentUser().getUid())
                                 .collection("Kalori")
@@ -196,15 +198,13 @@ public class RencanaActivity extends AppCompatActivity {
                             }
                         });
 
-
-                        final double finalKalori = kalori;
                         docRef
-                                .update("kaloriHarian", String.format("%.2f", kalori))
+                                .update("kaloriHarian", hasilFormat)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Intent goToHome = new Intent(getApplicationContext(), TahapRencanaActivity.class);
-                                        goToHome.putExtra("kalori", String.format("%.2f", finalKalori));
+                                        goToHome.putExtra("kalori", hasilFormat);
                                         startActivity(goToHome);
                                         finish();
                                     }

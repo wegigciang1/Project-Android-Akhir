@@ -116,8 +116,8 @@ public class DetailItemActivity extends AppCompatActivity {
     private void updateDataEarned(DocumentReference collref, final double total, final double totalKalori) {
         collref
                 .update(
-                        "eaten", String.format("%.0f", total),
-                        "kaloriHarian", String.format("%.2f", totalKalori)
+                        "eaten", String.format(Locale.US,"%.0f", total),
+                        "kaloriHarian", String.format(Locale.US,"%.2f", totalKalori)
                 )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

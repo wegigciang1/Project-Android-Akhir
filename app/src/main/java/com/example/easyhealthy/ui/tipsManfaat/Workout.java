@@ -140,8 +140,8 @@ public class Workout extends AppCompatActivity {
     private void updateDataBurned(DocumentReference collref, final double total, final double totalKalori) {
         collref
                 .update(
-                        "burned", String.format("%.0f", total),
-                        "kaloriHarian", String.format("%.2f", totalKalori)
+                        "burned", String.format(Locale.US,"%.0f", total),
+                        "kaloriHarian", String.format(Locale.US,"%.2f", totalKalori)
                 )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

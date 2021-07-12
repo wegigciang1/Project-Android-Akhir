@@ -1,5 +1,6 @@
 package com.example.easyhealthy;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -67,13 +68,14 @@ public class TahapRencanaActivity extends AppCompatActivity {
         final double kalori = Double.parseDouble(data) * (nilai);
         final DocumentReference docRef = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         docRef
-                                .update("kaloriHarian", String.format("%.2f", kalori))
+                                .update("kaloriHarian", String.format(Locale.US,"%.2f", kalori))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -87,13 +89,14 @@ public class TahapRencanaActivity extends AppCompatActivity {
 
 
         collref.whereEqualTo("tanggal", sdf.format(date)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         DocumentReference docref = mFirebaseFirestore.collection("Users").document(mFirebaseAuth.getCurrentUser().getUid()).collection("Kalori").document(document.getId());
                         docref
-                                .update("kaloriHarian", String.format("%.2f", kalori))
+                                .update("kaloriHarian", String.format(Locale.US,"%.2f", kalori))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
