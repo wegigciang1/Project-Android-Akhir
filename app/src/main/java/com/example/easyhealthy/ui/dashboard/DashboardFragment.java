@@ -110,7 +110,7 @@ public class DashboardFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        String kaloriTamp = (String) document.get("kaloriHarian");
+                        String kaloriTamp = String.valueOf(document.get("kaloriHarian"));
                         eaten.setText((String) document.get("eaten"));
                         assert kaloriTamp != null;
                         double kaloriConvert = Double.parseDouble(kaloriTamp);

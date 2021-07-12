@@ -81,6 +81,10 @@ public class RegisActivity extends AppCompatActivity {
 
                     progressBar.setVisibility(View.VISIBLE);
 
+                    String email = txtemail.getText().toString();
+
+
+
                     mFirebaseAuth.createUserWithEmailAndPassword(txtemail.getText().toString(), txtpass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
